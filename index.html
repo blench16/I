@@ -1398,7 +1398,7 @@ hud();requestAnimationFrame(loop);next();
     $('pdm').textContent='读……';
     try{if(!ddb)await dOpen()}catch(e){$('pdm').textContent='读不了本地数据。';return}
     dvp=await dGet();
-    if(!dvp.length){$('pdm').textContent='没有找到图片。';return}
+    if(!dvp.length){$('pdm').innerHTML='没有找到图片。<br><br>这里只有他自己能看到。';return}
     dvp.sort((a,b)=>{const ta=a.t||0,tb=b.t||0;if(ta!==tb)return ta-tb;return a.name.localeCompare(b.name,'zh')});
     dvi=0;$('pdlg').style.display='none';$('pv').style.display='flex';dShow();
   };
