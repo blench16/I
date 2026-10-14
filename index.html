@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>存档：十六岁</title>
+<style>
+:root{--bg:#0b0c10;--fg:#d8d6cf;--amber:#d9a45b;--ai:#7fc4d8;--dim:#7b8090;--line:#2a2f3a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0c10;--fg:#d8d6cf}}
+:root[data-theme="dark"]{--bg:#0b0c10;--fg:#d8d6cf}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:"Zpix","PingFang SC","Microsoft YaHei","Noto Sans CJK SC",ui-monospace,monospace;-webkit-tap-highlight-color:transparent;user-select:none}
+.wrap{max-width:560px;height:100%;margin:0 auto;display:flex;flex-direction:column;padding:0 10px 10px}
+#hud{font-size:12px;color:var(--dim);padding:8px 2px;display:flex;justify-content:space-between;letter-spacing:1px}
+.stage{position:relative}
+canvas{width:100%;display:block;image-rendering:pixelated;border:2px solid var(--line);background:#000;transition:filter 1.5s}
+#title{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;opacity:0;transition:opacity 1.2s;pointer-events:none;text-align:center}
+#title b{font-size:26px;font-weight:700;letter-spacing:3px;text-shadow:2px 2px 0 #000}
+#title i{font-size:14px;font-style:normal;color:var(--amber);text-shadow:1px 1px 0 #000}
+#box{flex:1;margin-top:10px;border:2px solid var(--line);padding:16px 16px 12px;position:relative;overflow:auto;cursor:pointer;display:flex;flex-direction:column;gap:12px}
+#txt{font-size:18px;line-height:1.8;white-space:pre-wrap}
+.sp-i #txt{color:var(--amber);font-style:italic}
+.sp-a #txt{color:var(--ai)}
+.sp-a #txt::before{content:"AI ▍ ";opacity:.6}
+#hint{margin-top:auto;align-self:flex-end;color:var(--dim);animation:bl 1s steps(2) infinite;visibility:hidden}
+@keyframes bl{50%{opacity:0}}
+#btns{display:flex;flex-direction:column;gap:8px}
+button{font:inherit;font-size:16px;color:var(--fg);background:transparent;border:2px solid var(--dim);padding:10px 12px;text-align:left;cursor:pointer}
+button:active,button:focus-visible{border-color:var(--amber);color:var(--amber);outline:none}
+#diary{position:fixed;inset:0;background:rgba(5,6,9,.94);display:none;flex-direction:column;gap:12px;padding:calc(20px + env(safe-area-inset-top,0px)) 18px calc(20px + env(safe-area-inset-bottom,0px));z-index:5;max-width:560px;margin:0 auto}
+#puz{position:fixed;inset:0;background:rgba(3,6,9,.96);display:none;flex-direction:column;gap:10px;padding:calc(18px + env(safe-area-inset-top,0px)) 16px calc(18px + env(safe-area-inset-bottom,0px));z-index:5;max-width:560px;margin:0 auto;font-family:ui-monospace,Menlo,Consolas,monospace}
+#puz h2{margin:0;font-size:15px;color:#3fb68b;font-weight:400}
+#puz p{margin:0;font-size:13px;color:var(--dim);line-height:1.6}
+#rows{display:flex;flex-direction:column;gap:6px;flex:1;overflow:auto}
+#rows button{font-family:inherit;font-size:14px;display:flex;justify-content:space-between;gap:8px;border-color:#2a3a3a}
+#rows button.ok{border-color:#3fb68b;color:#3fb68b}
+#wb[disabled]{opacity:.35}
+.pnl{position:fixed;inset:0;background:rgba(3,6,9,.97);display:none;flex-direction:column;gap:8px;padding:calc(16px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px));z-index:5;max-width:560px;margin:0 auto;font-family:ui-monospace,Menlo,Consolas,monospace}
+.pnl h2{margin:0;font-size:15px;color:#3fb68b;font-weight:400}
+.pnl p{margin:0;font-size:13px;color:var(--dim)}
+.pnl textarea{height:28%;background:#0b1118;color:#cfe8dc;border:2px solid #1d2a2a;font:inherit;font-size:14px;padding:10px;resize:none;user-select:text}
+.pnl iframe{flex:1;border:2px solid #1d2a2a;background:#fff;min-height:120px}
+.pnl canvas{align-self:center;max-height:48vh;max-width:100%;image-rendering:pixelated;background:#0b1118;border:2px solid #1d2a2a}
+.pnl button[disabled]{opacity:.35}
+.pnl input[type=file]{font:inherit;font-size:13px;color:var(--fg)}
+.song{color:var(--ai)!important}
+#diary h2{margin:0;font-size:16px;color:var(--amber);font-weight:400}
+#diary textarea{flex:1;background:#12141b;color:var(--fg);border:2px solid var(--line);font:inherit;font-size:18px;line-height:1.8;padding:14px;resize:none;user-select:text}
+#diary textarea:focus{outline:none;border-color:var(--amber)}
+#diary p{margin:0;font-size:13px;color:var(--dim)}
+#frags{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+#frags span{position:absolute;bottom:-30px;color:var(--amber);font-size:14px;opacity:0;animation:fl linear forwards}
+@keyframes fl{0%{transform:translate(0,0);opacity:0}15%{opacity:.7}100%{transform:translate(24px,-110vh);opacity:0}}
+@media (prefers-reduced-motion:reduce){#hint{animation:none}#frags span{animation-duration:30s!important}}
+@media (orientation:landscape) and (max-height:560px){
+  :root{--sl:env(safe-area-inset-left,0px);--sr:env(safe-area-inset-right,0px)}
+  .wrap{max-width:none;display:grid;grid-template-columns:minmax(0,min(56vw,calc((100dvh - 56px) * 16 / 9))) minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:10px;padding:0 calc(10px + var(--sr)) 8px calc(10px + var(--sl))}
+  #hud{grid-column:1;grid-row:1;padding:4px 2px;font-size:11px}
+  .stage{grid-column:1;grid-row:2;align-self:start}
+  #box{grid-column:2;grid-row:1 / span 2;margin-top:6px;padding:12px 14px 10px;gap:8px;min-height:0}
+  #txt{font-size:16px;line-height:1.65}
+  button{font-size:14px;padding:8px 10px}
+  #title b{font-size:20px;letter-spacing:2px}
+  #title i{font-size:12px}
+  #diary,#puz,.pnl{max-width:none;padding-left:calc(16px + var(--sl));padding-right:calc(16px + var(--sr))}
+  #diary,#puz,.pnl{padding-top:calc(10px + env(safe-area-inset-top,0px));padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));gap:6px}
+  #diary textarea{font-size:15px;line-height:1.6;padding:10px;min-height:0}
+  #diary h2,.pnl h2,#puz h2{font-size:14px}
+  #diary p,.pnl p,#puz p{font-size:12px;line-height:1.4}
+  #rows{min-height:0}
+  #rows button{font-size:13px;padding:6px 10px}
+  #run[style*="flex"]{display:grid!important}
+  #run{grid-template-columns:1fr 1fr;grid-template-rows:auto auto 1fr auto;column-gap:12px}
+  #run h2{grid-column:1;grid-row:1}#run p{grid-column:1;grid-row:2}
+  #run textarea{grid-column:1;grid-row:3;height:auto;min-height:0}
+  #run #rr{grid-column:1;grid-row:4}
+  #run iframe{grid-column:2;grid-row:1 / span 3;min-height:0}
+  #run #rd{grid-column:2;grid-row:4}
+  #skp[style*="flex"]{display:grid!important}
+  #skp{grid-template-columns:1fr auto;grid-template-rows:auto auto auto auto 1fr auto;column-gap:16px;align-content:start}
+  #skp>*{grid-column:1}
+  #skp canvas{grid-column:2;grid-row:1 / span 6;align-self:center;max-height:calc(100dvh - 30px);height:calc(100dvh - 30px);width:auto;aspect-ratio:1/2}
+  #skp #sk{grid-row:6;align-self:end}
+  #cl{min-height:0}
+}
+@media (orientation:landscape) and (max-height:380px){
+  #txt{font-size:15px}
+  #hud{font-size:10px}
+}
+</style>
+</head>
+<body>
+<div id="frags"></div>
+<div class="wrap">
+  <div id="hud"><span id="ttlh">存档：十六岁</span><span><button id="chb" style="display:none;padding:2px 8px;font-size:12px;border-width:1px">章节</button> <button id="snd" style="padding:2px 8px;font-size:12px;border-width:1px">♪ 开</button></span></div>
+  <div class="stage"><canvas id="c" width="160" height="90"></canvas><div id="title"></div></div>
+  <div id="box"><div id="txt"></div><div id="btns"></div><div id="hint">点击继续 ▾</div></div>
+</div>
+<div id="puz">
+  <h2>level.dat</h2>
+  <p id="pmsg">点一项，就能改它的值。</p>
+  <div id="rows"></div>
+  <button id="wb" disabled>写回存档</button>
+</div>
+<div id="chap" class="pnl">
+  <h2>选章节</h2>
+  <p>测试用：直接跳到某一章。跳过去以后，之前选过的选项会清空。</p>
+  <div id="cl" style="display:flex;flex-direction:column;gap:8px;overflow:auto;flex:1"></div>
+  <button id="cc">返回</button>
+</div>
+<div id="run" class="pnl">
+  <h2>HTML 运行器</h2>
+  <p>写点什么，点运行。改一改里面的字，也可以。</p>
+  <textarea id="rc" spellcheck="false" autocapitalize="off" autocorrect="off"></textarea>
+  <button id="rr">运行</button>
+  <iframe id="rf" title="运行结果" sandbox="allow-scripts"></iframe>
+  <button id="rd" disabled>就是这个</button>
+</div>
+<div id="skp" class="pnl">
+  <h2>皮肤生成器</h2>
+  <p>选一张照片，把它变成一个像素小人。</p>
+  <input type="file" id="sf" accept="image/*">
+  <button id="sd">没有照片？用默认的</button>
+  <canvas id="sc" width="128" height="256"></canvas>
+  <button id="sk" disabled>就是这个</button>
+</div>
+<div id="diary">
+  <h2>K 的日记本</h2>
+  <textarea id="ta" placeholder="写点什么。也可以留白。"></textarea>
+  <p>你写下的字，会变成飘在 K 周围的碎片。</p>
+  <button id="fill">替 K 写下：我很难堪。</button>
+  <button id="close">合上日记本</button>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const cv=$('#c'),g=cv.getContext('2d'),W=160,H=90;
+const R=(x,y,w,h,c,a)=>{g.globalAlpha=a==null?1:a;g.fillStyle=c;g.fillRect(x|0,y|0,w|0,h|0);g.globalAlpha=1};
+const S={f:{},cm:0,sc:'black',p:0,anim:0,t0:0,fade:1,ft:1,num:0};
+
+const P=(a,c,al)=>{g.globalAlpha=al==null?1:al;g.fillStyle=c;g.beginPath();g.moveTo(a[0],a[1]);for(let i=2;i<a.length;i+=2)g.lineTo(a[i],a[i+1]);g.fill();g.globalAlpha=1};
+const scenes={
+black(){R(0,0,W,H,'#000')},
+tv(t){
+  R(0,0,W,H,'#0c0e13');R(0,58,W,32,'#171a22');
+  R(10,10,28,22,'#232733');R(12,12,24,18,'#4a5260');R(15,18,10,4,'#6a7384');R(22,16,10,5,'#5d6677');
+  [[20,70,'#c0603a'],[34,76,'#d9a45b'],[56,72,'#5b8fa8'],[70,80,'#8f6fa8'],[44,82,'#7fa86f']].forEach(a=>R(a[0],a[1],4,4,a[2]));
+  const fl=.55+.25*Math.sin(t*9)+.1*Math.sin(t*23);
+  R(88,26,44,34,'#2a2420');R(92,30,36,26,'#0a0c10');R(92,30,36,26,'#8fb8c9',fl*.5);
+  for(let y=30;y<56;y+=3)R(92,y,36,1,'#000',.25);
+  R(60,12,100,60,'#8fb8c9',.035*fl);
+  let kx=52;if(S.p>.7)kx+=(S.p-.7)/.3*110;
+  if(kx<160){R(kx,49,6,2,'#2a1d14');R(kx,50,6,6,'#e0b890');R(kx,56,6,6,'#c0603a');R(kx,62,8,2,'#3a4260')}
+  if(S.p>0){const ax=S.p<.7?160-S.p/.7*100:kx+8;
+    R(ax+8,18,70,72,'#06070a',.92);R(ax,48,170-ax,6,'#1b1f2a');R(ax-4,49,5,4,'#d2a27c')}
+},
+van(t){
+  R(0,0,W,H,'#0d0f14');R(14,12,132,38,'#1b1f29');R(18,15,124,32,'#252b3a');
+  g.save();g.beginPath();g.rect(18,15,124,32);g.clip();
+  for(let i=0;i<8;i++){const x=(((i*37-t*60)%160)+160)%160;R(x,20+(i%4)*7,10,1,'#c9d3e6',.35)}
+  g.restore();
+  R(0,60,W,30,'#14171e');R(30,56,100,16,'#3a2f2a');
+  R(62,44,6,2,'#2a1d14');R(62,46,6,6,'#d9b08c');R(61,52,8,8,'#4a5a78');
+  R(98,54,16,4,'#d9a45b',.12+.08*Math.sin(t*2));
+},
+class(t){
+  R(0,0,W,H,'#16181f');R(0,60,W,30,'#1d2029');
+  R(40,6,80,22,'#1f3a33');R(46,12,30,1,'#cfd8d2',.5);R(46,17,18,1,'#cfd8d2',.4);
+  R(60,34,40,6,'#5a4636');R(76,42,8,4,'#2e2620');
+  for(let r=0;r<3;r++)for(let c=0;c<5;c++){const x=22+c*26,y=46+r*12;R(x,y,16,5,'#4a3a2e');R(x+4,y+7,8,3,'#2e2620')}
+  if(S.cm==0){
+    R(74,42,4,3,'#d9708c');R(74,44,6,5,'#d9b08c');R(73,49,8,6,'#7a5a8a');
+    R(74,58,16,2,'#d9a45b',.3+.2*Math.sin(t*2));
+    R(30,50,6,2,'#2a1d14');R(30,52,6,6,'#d9b08c');R(29,58,8,8,'#4a5a78');
+  }else if(S.cm==2){
+    R(66,56,6,2,'#2a1d14');R(66,58,6,6,'#d9b08c');R(65,64,8,6,'#4a5a78');
+    if(S.pair){R(82,56,6,2,'#1a1410');R(82,58,6,6,'#d9b08c');R(81,64,8,6,'#a85b6a')}
+  }else{
+    R(126,64,5,2,'#2a1d14');R(126,66,5,5,'#d9b08c');R(125,71,7,4,'#4a5a78');
+    R(122,76,24,2,'#d9a45b',.25+.15*Math.sin(t*2));
+  }
+},
+hall(t){
+  const T=S.tch,lt=x=>x*28/60,lb=x=>90-x*34/60,f=(x,k)=>lt(x)+(lb(x)-lt(x))*k;
+  R(0,0,W,H,T?'#9aa0a6':'#14171d');
+  P([0,0,160,0,100,28,60,28],T?'#c4c7ca':'#1a1d24');P([0,90,160,90,100,56,60,56],T?'#8e9298':'#232832');
+  P([0,0,60,28,60,56,0,90],T?'#c9ccd0':'#2f353f');P([160,0,100,28,100,56,160,90],T?'#c9ccd0':'#2f353f');
+  P([0,49.5,60,43.4,60,56,0,90],T?'#aeb4ba':'#2b3f3c');P([160,49.5,100,43.4,100,56,160,90],T?'#aeb4ba':'#2b3f3c');
+  [[8,22],[32,44]].forEach((d,n)=>{const a=d[0],b=d[1],a2=a+2,b2=b-2;
+    P([a,f(a,.12),b,f(b,.12),b,f(b,1),a,f(a,1)],T?'#c8aa5a':'#4a3a2c');
+    P([a2,f(a2,.2),b2,f(b2,.2),b2,f(b2,.5),a2,f(a2,.5)],T?'#e8e8d0':'#d9c89a',T?.6:.35+.1*Math.sin(t*1.7+n*2))});
+  P([62,56,98,56,150,90,10,90],T?'#ffffff':'#cfd8e0',T?.06:.04);
+  R(66,30,28,24,T?'#e8eef0':'#9fb4c2',.55+.05*Math.sin(t*1.3));R(70,34,20,16,T?'#ffffff':'#e8f0f4',.35);
+  R(112,74,34,2,'#000',.4);
+  R(127,46,7,7,'#d9b08c');R(126,45,9,3,'#2a1d14');R(125,53,9,18,'#4a5a78');R(133,54,2,14,'#4a5a78');R(126,71,3,3,'#2a3a6a');R(131,71,3,3,'#2a3a6a');
+  if(T){R(96,38,8,8,'#d9b08c');R(95,37,10,3,'#2a1d14');R(94,46,12,24,'#4a4a52');R(96,70,4,8,'#2a2c32');R(101,70,4,8,'#2a2c32');R(84,74,34,2,'#000',.35)}
+},
+eyes(t){
+  R(0,0,W,H,'#1a1416');
+  [[14],[90]].forEach(a=>{const x=a[0];R(x,20,56,40,'#b0302a');R(x+3,23,50,34,'#1a1416');R(x+8,34,40,14,'#d8d6cf');R(x+22+Math.sin(t*.7)*2,35,12,12,'#2a1d14')});
+  R(70,36,20,3,'#b0302a');
+  const px=S.f.looked?76:72+((Math.sin(t*1.1)+1)/2)*-10;
+  R(66,70,24,10,'#d8d6cf',.55);R(px,71,8,8,'#2a1d14',.8);
+},
+gma(t){
+  const fl=.5+.25*Math.sin(t*9)+.1*Math.sin(t*23);
+  R(0,0,W,H,'#15120f');R(0,0,W,52,'#1c1713');
+  for(let i=0;i<30;i++)R((i*41+7)%156,(i*19)%46,3,1,'#120f0c',.8);
+  R(14,10,24,26,'#2a3140');R(14,10,24,26,'#d9a45b',.07);R(25,10,2,26,'#15120f');R(14,22,24,2,'#15120f');
+  for(let k=0;k<14;k++)R(14+k*2.4,36+k*1.9,24,2,'#d9a45b',.03);
+  R(0,52,W,8,'#3a2e24');R(0,52,W,1,'#5a4838');
+  for(let x=0;x<W;x+=6)R(x,54,1,6,'#2e241b',.6);
+  R(0,60,W,30,'#241c15');for(let y=68;y<90;y+=9)R(0,y,W,1,'#18120e');
+  R(96,28,38,26,'#2a2824');R(98,30,26,20,'#0a0c10');R(98,30,26,20,'#8fb8c9',fl*.5);R(98,30,26,1,'#fff',.07);R(127,36,4,4,'#4a4640');R(127,42,4,4,'#4a4640');
+  for(let y=30;y<50;y+=3)R(98,y,26,1,'#000',.25);
+  R(70,8,90,48,'#8fb8c9',.035*fl);R(84,52,60,8,'#8fb8c9',.07*fl);
+  R(24,48,20,5,'#5b7a9a');R(28,45,12,4,'#a85b4a');R(40,49,10,4,'#6f8f6a');
+  R(62,40,6,6,'#d9b08c');R(62,39,6,2,'#2a1d14');R(60,46,10,10,'#5b7a9a');R(56,47,5,3,'#5b7a9a');R(69,47,5,3,'#5b7a9a');R(61,56,3,10,'#2a3a6a');R(66,56,3,10,'#2a3a6a');R(62,41,4,3,'#8fb8c9',fl*.12);
+},
+fly(t){
+  const a=S.alt||0;R(0,0,W,H,'#0a0a12');
+  for(let i=0;i<34;i++){if(i/34<a*1.05){const x=(i*47)%W,y=(i*29)%50;R(x,y,1+(i%3==0),1,'#e8eaf2',.4+.4*Math.sin(t*2+i))}}
+  R(0,0,W,6,'#000',.5+.3*(1-a));
+  const y=72-a*46;R(76,y,8,8,'#d9b08c');R(76,y+8,8,10,'#3a7a8a');R(76,y+18,3,6,'#3a3f8a');R(81,y+18,3,6,'#3a3f8a');
+  R(0,80,W,10,'#000',.85);
+},
+comp(t){
+  R(0,0,W,H,'#0b0d12');R(0,66,W,24,'#2a2018');R(50,24,60,40,'#1a1c22');R(54,28,52,32,'#12202a');
+  const fl=.85+.15*Math.sin(t*5);R(30,10,100,60,'#6fa88a',.03*fl);
+  R(66,44,26,8,'#6fa88a',fl);R(88,34,4,12,'#6fa88a',fl);R(88,32,8,4,'#6fa88a',fl);R(70,52,3,6,'#6fa88a',fl);R(84,52,3,6,'#6fa88a',fl);R(58,46,9,3,'#6fa88a',fl);
+  R(26,46,6,6,'#d9b08c');R(25,52,8,12,'#4a5a78');
+  if(S.cup){R(52,70,46,6,'#1b1f27');const cx=96+S.cup*12;R(cx,58,7,9,'#d8d6cf',.8);R(cx+1,59,5,3,'#8fb8c9',.5);if(S.spill)R(56,71,38,3,'#8fb8c9',.5)}
+  const q=.15+.15*Math.sin(t*1.3);
+  R(123,38,9,9,'#8a8f9a',q);R(122,47,11,20,'#8a8f9a',q);R(134,60,6,4,'#c0603a',q*1.5);R(138,56,6,4,'#d9a45b',q*1.5);
+},
+room(t){
+  R(0,0,W,H,'#101216');R(0,62,W,28,'#1a1612');
+  for(let i=0;i<8;i++)R(i*21+6,0,1,62,'#000',.06);
+  R(0,60,W,2,'#0b0c0f');
+  const leg=()=>{R(18,67,56,2,'#000',.35);R(18,62,3,5,'#0c0a08');R(69,62,3,5,'#0c0a08')};
+  leg();
+  R(20,50,50,12,'#3b4560');R(20,50,50,2,'#4b5778');R(20,59,50,3,'#2a3248');
+  [[26,53,14],[44,55,18],[57,52,9]].forEach(a=>R(a[0],a[1],a[2],1,'#2a3248',.8));
+  R(22,47,12,5,'#8a8f9a');R(22,47,12,1,'#a5aab4');R(22,51,12,1,'#6a6f7a');
+  R(100,10,30,30,'#d9a45b',.12+.05*Math.sin(t));R(100,10,30,30,'#2a3140',.6);
+  R(98,8,34,2,'#2a2620');R(98,40,34,2,'#2a2620');R(98,8,2,34,'#2a2620');R(130,8,2,34,'#2a2620');R(114,10,2,30,'#2a2620');R(100,24,30,2,'#2a2620');R(96,42,38,2,'#3a3228');
+  R(140,20,14,44,'#050608');R(138,18,2,46,'#1e1b17');R(154,18,2,46,'#1e1b17');R(138,18,18,2,'#1e1b17');
+  const br=Math.sin(t*1.6)>0?0:1;
+  R(44,40+br,6,6,'#d9b08c');R(43,39+br,8,3,'#2a1d14');R(43,46+br,8,8-br,'#4a5a78');
+  if(S.cm==9){
+    [[8,10,10,7],[30,22,6,5],[76,8,12,6],[88,30,5,8],[4,40,7,6]].forEach(a=>{R(a[0],a[1],a[2],a[3],'#2c2c30');R(a[0],a[1],a[2],1,'#46464c');R(a[0],a[1]+a[3],a[2],1,'#000',.4)});
+    for(let k=0;k<14;k++)R(116+((k*3)%5),44+k,1,1,'#08080a',.7);
+    R(0,62,W,28,'#17130f');
+    for(let i=0;i<22;i++)R((i*37+11)%150,64+(i*13)%22,4+(i%3)*3,1,'#100d0a',.9);
+    for(let i=0;i<12;i++)R((i*53+5)%156,63+(i*7)%24,2,1,'#241e18',.6);
+    [[10,64],[34,66],[80,63],[90,65],[6,68]].forEach(a=>R(a[0],a[1],2,1,'#3a3a40'));
+    leg();
+    R(50,48+br,5,2,'#d9b08c');R(54,46+br,3,5,'#9fc8d9',.55+.2*Math.sin(t*3));R(46,41+br,3,3,'#8fb8c9',.1);
+    R(118,58,2,10,'#2a2c32');R(114,66,10,2,'#2a2c32');R(113,52,12,7,'#2a2c32');
+    R(115,53,8,5,'#555',.15+.35*Math.abs(Math.sin(t*22)));
+    if(Math.sin(t*.6)>.93)R(143,24,8,40,'#000');
+    const sw=S.rs=='night'?Math.sin(t*1.4)*2:0;
+    R(76+sw,0,1,14,'#555');R(75+sw,12,4,2,'#2a2620');R(73+sw,14,7,5,'#f2e08a',.9);
+    R(40+sw,4,74,62,'#f2e08a',.025);R(50+sw,8,54,50,'#f2e08a',.05+.015*Math.sin(t*9));
+    R(48+sw,70,64,3,'#f2e08a',.05);R(60+sw,72,40,2,'#f2e08a',.05);
+    for(let i=0;i<7;i++){R(56+((i*17+t*3)%48),14+((i*23+t*2.5)%44),1,1,'#f2e08a',.25+.2*Math.sin(t*2+i))}
+    if(S.sig){for(let k=0;k<4;k++)R(14+k*3,20-k*2,2,2+k*2,k<(S.alt>=.8?1:0)?'#9fc8d9':'#2a2f3a')}
+    R(0,0,W,6,'#000',.25);R(0,H-8,W,8,'#000',.3);R(0,0,8,H,'#000',.2);R(W-8,0,8,H,'#000',.2);
+  }
+},
+coat(t){
+  R(0,0,W,H,'#2a2620');R(0,64,W,26,'#352e26');R(60,84,40,3,'#000',.4);
+  R(67,54,26,30,'#5a6a3a');R(63,56,5,26,'#5a6a3a');R(92,56,5,26,'#5a6a3a');
+  R(80,54,1,30,'#3a4626');R(67,54,2,30,'#6f8048',.5);R(91,54,2,30,'#3a4626');
+  R(63,78,5,3,'#4a5a2e');R(92,78,5,3,'#4a5a2e');R(68,84,9,3,'#1a1612');R(83,84,9,3,'#1a1612');
+  R(65,50,30,6,'#4a5a2e');R(65,50,30,1,'#6f8048',.6);
+  R(73,43,14,7,'#e0b890');R(72,42,16,3,'#2a1d14');R(76,46,2,1,'#000');R(82,46,2,1,'#000');
+  [[16,34],[38,38],[114,36],[136,40]].forEach((a,i)=>{const b=Math.sin(t*5+i*2)*1.5,x=a[0],y=a[1]+b;
+    R(x,y,9,9,'#d8b898');R(x+2,y+5,5,2,'#000');R(x-1,y+9,11,22,'#8a6a5a')});
+},
+play(t){
+  R(0,0,W,H,'#c9d0d4');R(0,52,W,38,'#8a7a62');R(0,28,60,24,'#6a6258');R(0,26,60,3,'#4a423a');
+  R(120,14,6,38,'#4a3a2c');R(108,4,30,20,'#4f7a3a');
+  for(let i=0;i<20;i++)R((i*31)%156,56+(i*13)%30,4,1,'#6e604c',.8);
+  const a=S.alt||0;
+  if(!S.fell){const x=14+a*86,y=44,l=Math.sin(t*16)*3;
+    R(x,y,6,2,'#2a1d14');R(x,y+2,6,6,'#e0b890');R(x-1,y+8,8,9,'#c0603a');R(x+1,y+17,3,7,'#3a4260');R(x+4+l/2,y+17,3,7,'#3a4260')}
+  else{const x=96,y=44;R(x,y+16,22,6,'#c0603a');R(x+22,y+14,6,6,'#e0b890');R(x+22,y+13,6,2,'#2a1d14');R(x-9,y+17,10,5,'#3a4260');R(x-5,y+17,3,3,'#b0302a');R(x-3,y+24,12,1,'#6e604c',.8)}
+},
+wash(t){
+  R(0,0,W,H,'#1a1612');R(0,60,W,30,'#241c15');
+  R(68,8,16,6,'#8a909a');R(74,14,4,8,'#8a909a');
+  for(let k=0;k<9;k++)R(75,22+k*4+((t*60)%4),2,3,'#8fb8c9',.6);
+  R(60,56,24,12,'#d9b08c');R(66,58,8,5,'#b0302a',.6);R(66,64,6,10,'#c9708c',.35);R(60,74,24,2,'#8fb8c9',.4);
+  R(40,50,22,8,'#c9a07c');R(86,52,26,10,'#c9a07c');
+},
+floor(t){
+  R(0,0,W,H,'#0b0d12');R(0,62,W,28,'#14161c');R(20,64,120,20,'#3a3426');
+  for(let i=0;i<20;i++)R(20+i*6,64,1,20,'#2a2518',.6);
+  R(10,8,30,26,'#1a2230');R(10,8,30,26,'#8fb8c9',.04);R(24,14,6,6,'#cfd8e0',.5);R(18,66,40,2,'#8fb8c9',.05);
+  R(126,34,2,28,'#2a2c32');R(120,28,14,8,'#2a2c32');R(122,30,10,4,'#555',.2+.4*Math.abs(Math.sin(t*20)));
+  R(44,66,7,7,'#d9b08c');R(51,67,22,7,'#2e3a4a');
+  R(88,64,8,8,'#a8896e');R(96,64,34,9,'#4a3a4a');
+},
+ginkgo(t){
+  R(0,0,W,H,'#cfd2cc');R(0,64,W,26,'#bfa24a');
+  const C=['#d8b24a','#e8c85a','#c9a03a'];
+  for(let i=0;i<20;i++)R((i*29)%156,66+(i*13)%22,3,2,C[i%3]);
+  R(72,22,10,46,'#4a3a2c');
+  for(let i=0;i<26;i++)R((i*37)%110+25,(i*19)%34+2,12,8,C[i%3]);
+  R(60,50,7,7,'#e0b890');R(60,49,7,3,'#2a1d14');R(59,57,9,18,'#a85b6a');R(60,75,3,8,'#2a3a6a');R(65,75,3,8,'#2a3a6a');
+  R(92,58,6,6,'#e0b890');R(92,57,6,2,'#2a1d14');R(91,64,8,12,'#e8e4d8');R(92,76,3,7,'#2a3a6a');R(96,76,3,7,'#2a3a6a');
+  for(let i=0;i<8;i++)R((i*23+t*6)%150+4,((t*14+i*17)%70)+4,2,2,'#e8c85a',.8);
+  [[4,4,152,2],[4,84,152,2],[4,4,2,82],[154,4,2,82]].forEach(a=>R(a[0],a[1],a[2],a[3],'#f5f1e6'));
+},
+dorm(t){
+  R(0,0,W,H,'#0e1014');R(0,64,W,26,'#1a1c22');
+  [[6,'#3a4560','#4a3a4a'],[110,'#4a3a4a','#3a4560']].forEach(a=>{const x=a[0];
+    R(x,14,3,54,'#2a2f3a');R(x+41,14,3,54,'#2a2f3a');R(x,34,44,3,'#2a2f3a');R(x,52,44,3,'#2a2f3a');R(x+3,28,38,6,a[1]);R(x+3,46,38,6,a[2])});
+  R(130,52,6,6,'#d9b08c');R(130,51,6,2,'#2a1d14');R(129,58,8,10,'#4a5a78');
+  [[62,'#3a4a5c'],[74,'#5a4a3a'],[86,'#4a5a4a']].forEach((a,i)=>{R(a[0],40,8,8,'#d9b08c');R(a[0]-1,48,10,18,a[1])});
+  const fl=Math.sin(t*.9)>.96?.2:.55;
+  R(56,6,48,3,'#cfe0e8',fl);R(40,8,80,50,'#cfe0e8',.03);R(60,68,36,2,'#000',.4);
+},
+meal(t){
+  R(0,0,W,H,'#14110e');R(0,56,W,34,'#241c15');R(130,10,22,26,'#cfd8e0',.2);
+  R(8,52,30,3,'#4a3a2c');R(10,55,2,18,'#4a3a2c');R(34,55,2,18,'#4a3a2c');R(14,50,8,2,'#d8d6cf');
+  R(18,36,6,6,'#d9b08c');R(18,35,6,2,'#2a1d14');R(16,42,10,12,'#4a5a78');
+  R(50,50,60,24,'#8a909a');R(53,53,54,18,'#2a2c32');
+  R(74,20,4,18,'#8a909a');R(74,20,14,3,'#8a909a');
+  for(let k=0;k<6;k++)R(87,23+k*4+((t*50)%4),1,3,'#8fb8c9',.6);
+  R(66,58,28,10,'#d8d6cf');R(70,60,20,3,'#a8745a');R(64,66,32,2,'#8fb8c9',.4);
+},
+mirror(t){
+  R(0,0,W,H,'#0e1014');
+  R(76,76,10,10,'#c9a07c');R(78,64,6,16,'#4a3a2c');
+  R(56,14,50,50,'#4a3a2c');R(59,17,44,44,'#2a3140');
+  const o=Math.sin(t*.4)*2;
+  R(70+o,26,20,28,'#7a6a5a',.3+.1*Math.sin(t*.8));R(72+o,28,16,24,'#7a6a5a',.12);
+  R(62,20,8,2,'#fff',.18);
+},
+pad(t){
+  R(0,0,W,H,'#0e1014');R(0,60,W,30,'#14161c');R(30,0,100,60,'#f2e08a',.02);
+  R(40,80,60,1,'#1a1c22');
+  R(50,68,24,12,'#2a2c32');R(58,72,6,6,'#0a0a0c');R(50,68,24,1,'#3a3d46');
+  R(86,72,24,12,'#2a2c32');R(92,76,2,2,'#a85b4a');R(97,74,2,2,'#5a8a6a');R(97,79,2,2,'#5a6a9a');R(102,76,2,2,'#c9a03a');
+  R(78,74,4,3,'#2a2c32');R(80,80,3,2,'#2a2c32');R(46,82,3,2,'#2a2c32');
+  if(S.two){R(20,72,22,10,'#34373f');R(26,75,5,5,'#0a0a0c');R(116,64,24,10,'#34373f');R(122,67,2,2,'#a85b4a');R(127,67,2,2,'#5a8a6a');R(127,71,2,2,'#5a6a9a');R(132,69,2,2,'#c9a03a');R(108,76,3,2,'#34373f')}
+},
+wake(t){
+  R(0,0,W,H,'#1a1816');R(0,0,W,62,'#2a2a2e');R(0,62,W,28,'#17130f');
+  R(96,8,40,34,'#cfd8e0',.75);R(94,6,44,2,'#4a4238');R(94,42,44,2,'#4a4238');R(94,6,2,38,'#4a4238');R(136,6,2,38,'#4a4238');R(114,8,2,34,'#4a4238');R(96,24,40,2,'#4a4238');
+  for(let k=0;k<12;k++)R(96-k*5,44+k*3,34,2,'#cfd8e0',.05);
+  R(18,50,56,12,'#3b4560');R(18,50,56,2,'#4b5778');R(18,59,56,3,'#2a3248');R(18,62,3,5,'#0c0a08');R(71,62,3,5,'#0c0a08');
+  R(20,45,14,6,'#8a8f9a');R(20,45,14,1,'#a5aab4');
+  R(22,40,9,7,'#d9b08c');R(21,40,10,3,'#2a1d14');R(30,46,40,6,'#4a5a78');R(31,44+Math.round(Math.sin(t*2)*.5),6,3,'#d9b08c');
+  for(let i=0;i<6;i++)R(100-((i*13+t*4)%40),12+((i*19+t*3)%30),1,1,'#fff',.35);
+},
+water(t){
+  const r=performance.now()/1000-(S.sT||0),lv=S.st==1?Math.max(4,22-Math.min(r,3)*6):22;
+  R(0,0,W,H,'#1a1816');R(0,66,W,24,'#2a2018');R(0,66,W,1,'#4a3a2c');R(0,0,50,66,'#cfd8e0',.05);
+  R(62,36,18,30,'#cfd8e0',.22);R(62,36,2,30,'#fff',.25);R(78,36,2,30,'#cfd8e0',.2);R(62,64,18,2,'#cfd8e0',.3);
+  R(64,64-lv,14,lv,'#8fb8c9',.45);R(64,64-lv,14,1,'#fff',.3+.1*Math.sin(t*3));
+},
+cat(t){
+  const st=S.st||0,r=performance.now()/1000-(S.sT||0),d=st>=4?1:0,sit=st>=2,ly=st>=2&&st<4;
+  R(0,0,W,H,'#c9d0d4');R(0,24,W,40,'#6a6258');R(0,24,W,3,'#4a423a');R(0,64,W,26,'#8a7a62');
+  for(let i=0;i<14;i++)R((i*31)%156,66+(i*11)%22,4,1,'#6e604c',.8);
+  if(sit)R(40,50,90,26,'#f2e08a',.07);
+  const tree=cx=>{R(cx-2,34,4,32,'#4a3a2c');R(cx-1,50,5,2,'#4a3a2c');
+    for(let i=0;i<9;i++)R(cx-14+(i*7)%26,12+(i*5)%20,10,7,i%2?'#6b8a3a':'#7f9a46');
+    [[-10,26],[4,20],[-3,30],[10,28],[-12,17],[1,14]].forEach((a,k)=>R(cx+a[0],a[1],3,3,k%3?'#e08a3a':'#c9a03a'))};
+  tree(54);tree(122);
+  if(!sit){R(14,34,7,7,'#d9b08c');R(14,33,7,3,'#2a1d14');R(12,41,11,18,'#e8e4d8');R(13,59,4,10,'#2a3a6a');R(18,59,4,10,'#2a3a6a');R(23,46,16,3,'#e8e4d8');R(39,46,3,3,'#d9b08c')}
+  else{R(56,46,7,7,'#d9b08c');R(56,45,7,3,'#2a1d14');R(54,53,11,12,'#e8e4d8');R(65,63,12,4,'#2a3a6a');if(st==3){R(65,50,8,2,'#e8e4d8');R(72,46,3,5,'#9fc8d9')}}
+  R(70,68,14,3,'#d8d6cf');R(72,66,10,2,'#a8745a');
+  const x=d?84+Math.min(r,3)*70:84,y=60,l=d?Math.sin(r*22)*2:0,hx=d?x+10:x-6,tx=d?x-5:x+11;
+  if(ly){R(x,62,14,5,'#7a7468');R(hx,60,7,5,'#7a7468');R(hx,58,2,2,'#7a7468');R(hx+5,58,2,2,'#7a7468');R(hx+1,62,2,1,'#000');R(tx+3,64,6,2,'#7a7468')}
+  else{R(x,y,12,7,'#7a7468');R(hx,y-5,7,6,'#7a7468');R(hx,y-7,2,2,'#7a7468');R(hx+5,y-7,2,2,'#7a7468');R(hx+(d?5:1),y-3,1,1,'#000');
+    R(tx,y+(d?-2:Math.sin(t*4)*2),6,2,'#7a7468');R(x+1,y+7,2,4+l,'#6a6458');R(x+8,y+7,2,4-l,'#6a6458');
+    if(st==1)R(hx-1,y,2,2,'#c9708c')}
+  if(st==3&&r<.25)R(0,0,W,H,'#fff',.4*(1-r/.25));
+},
+phone(t){
+  scenes.room(t);
+  R(0,0,W,H,'#000',.35);
+  const q=.05+.015*Math.sin(t*3);
+  R(40,32,28,26,'#8fb8c9',q);R(44,36,20,18,'#8fb8c9',q+.01);
+  R(48,41,2,3,'#8fb8c9',.2);
+  R(50,48,6,2,'#d9b08c');R(55,45,4,7,'#cfe6f0');R(56,47,2,1,'#2a3140');R(56,49,2,1,'#2a3140');
+},
+lie(t){
+  const sw=Math.sin(t*1.2)*2;
+  R(0,0,W,H,'#1c1a17');R(104,56,40,22,'#2a251d',.8);R(112,62,26,14,'#241f18',.8);
+  R(10,10,16,10,'#2c2c30');R(10,10,16,1,'#46464c');R(120,12,10,7,'#2c2c30');R(120,12,10,1,'#46464c');
+  R(76+sw,0,1,30,'#555');R(74+sw,30,5,3,'#2a2620');R(72+sw,33,9,7,'#f2e08a',.95);
+  R(36+sw,8,82,62,'#f2e08a',.04);R(52+sw,20,50,42,'#f2e08a',.06+.01*Math.sin(t*9));
+  R(0,78,30,12,'#3b4560');R(0,78,30,2,'#4b5778');
+  R(0,0,W,10,'#000',.3);R(0,H-10,W,10,'#000',.3);R(0,0,10,H,'#000',.2);R(W-10,0,10,H,'#000',.2);
+},
+apps(t){
+  const st=S.st||0,r=performance.now()/1000-(S.sT||0);
+  R(0,0,W,H,'#0a0b0f');
+  R(52,6,56,78,'#14161c');R(55,10,50,70,'#1b2230');R(55,10,50,2,'#232a38');
+  const C=['#5a6a9a','#a85b4a','#5a8a6a','#c9a03a','#7a5a9a','#2a2f3a','#4a8a9a','#a8745a','#6a6f7a','#8a5a6a','#4a6a4a','#9a8a5a'];
+  for(let i=0;i<12;i++){
+    const c=i%3,rw=(i/3)|0,x=59+c*16,y=15+rw*16;
+    if(i==4){
+      if(st==1){const w=Math.round(12*Math.max(0,1-r/.5));if(w>0)R(x+6-w/2,y+6-w/2,w,w,'#2a2f3a')}
+      else{const dx=Math.sin(t*25)*.8;R(x+dx,y,12,12,'#2a2f3a');R(x+dx+4,y+3,4,6,'#e8e4d8');R(x+dx-2,y-2,4,4,'#c04040')}
+    }else R(x,y,12,12,C[i]);
+  }
+  R(57,68,46,10,'#232a38');
+  R(104,62,9,18,'#c9a07c');
+  R(0,0,W,6,'#000',.3);R(0,H-6,W,6,'#000',.3);
+},
+wall(t){
+  const st=S.st||0,r=performance.now()/1000-(S.sT||0),hz=st==1?Math.min(1,r/1.5):0;
+  for(let y=0;y<52;y+=2){const k=y/52;R(0,y,W,2,'rgb('+(42+k*48|0)+','+(80+k*50|0)+','+(136+k*48|0)+')')}
+  if(hz>0){R(0,0,W,52,'#c9d0d4',hz*.9);R(0,36,W,16,'#d8d2bc',hz*.4)}
+  R(0,52,W,38,'#6a6258');R(0,50,W,3,'#4a423a');R(0,50,W,1,'#7a7268');
+  for(let i=0;i<7;i++)R(10+i*22,53,3,10+(i*7)%12,'#4a423a',.35);
+  [[8,62,18],[30,70,22],[58,60,26],[90,68,20],[112,76,30],[40,80,16]].forEach(a=>R(a[0],a[1],a[2],1,'#3a342e',.7));
+  R(20,74,14,8,'#7a7268',.4);R(96,58,16,10,'#7a7268',.35);R(130,72,12,12,'#7a7268',.3);
+},
+windmill(t){
+  R(0,0,W,H,'#c9d0d4');R(0,34,W,30,'#d8d2bc',.45);R(0,50,W,8,'#aab0ac',.7);
+  [[4,44,26,16,'#8a8278'],[32,48,20,12,'#9a9288'],[54,42,22,18,'#7a766e'],[78,50,16,10,'#8a8278'],[124,46,22,14,'#9a9288'],[146,44,14,16,'#8a8278']].forEach((a,i)=>{
+    R(a[0],a[1],a[2],a[3],a[4]);R(a[0],a[1],a[2],1,'#5a5650');R(a[0]+3,a[1]+4,4,4,'#3a3e4a');R(a[0]+a[2]-8,a[1]+6,4,a[3]-6,'#4a3a2c');
+    if(i%2==0)R(a[0]+a[2]-6,a[1]-3,4,3,'#6a6f7a')});
+  R(0,60,W,30,'#8a7a62');R(0,60,W,1,'#6e604c');R(0,74,W,6,'#9a8a72');
+  for(let y=20;y<86;y++){const w=3+(((y-20)/66*2)|0);R(100-(w>>1),y,w,1,'#f2f0ea')}
+  R(95,84,10,3,'#d8d6d0');R(96,18,9,5,'#f2f0ea');R(98,19,4,4,'#d8d6d0');
+  for(let k=0;k<3;k++){const g=t*1.2+k*2.094;for(let j=3;j<=26;j++){const w=j<12?3:2;R(100+Math.cos(g)*j,21+Math.sin(g)*j,w,w,'#f2f0ea')}}
+  for(let i=0;i<14;i++)R((i*13+5)%150+Math.sin(t*3+i)*1.5,80+(i*5)%8,1,4,'#6b7a46');
+  for(let i=0;i<6;i++)R((i*29+t*30)%160,50+(i*11)%30,1,1,'#d8d2bc',.5);
+},
+gourd(t){
+  R(0,0,W,H,'#14161c');R(0,62,W,28,'#4a3a2e');R(0,62,W,2,'#6a5440');
+  R(70,52,22,20,'#e0c040');R(74,40,14,14,'#e0c040');R(77,36,8,5,'#e0c040');
+},
+bracelet(t){
+  R(0,0,W,H,'#14161c');R(0,62,W,28,'#4a3a2e');R(0,62,W,2,'#6a5440');
+  for(let k=0;k<16;k++){const a=k/16*6.283;R(80+Math.cos(a)*24-2,54+Math.sin(a)*10-2,5,5,'#e8e4d8')}
+},
+letter(t){
+  R(0,0,W,H,'#14161c');R(0,62,W,28,'#4a3a2e');
+  R(43,17,80,60,'#000',.3);R(40,14,80,60,'#e8e4d8');R(40,14,80,1,'#f5f1e6');R(40,44,80,1,'#c9c5b8');
+  for(let i=0;i<8;i++){const len=36+((i*17)%34);for(let j=0;j<len;j+=6)R(48+j,22+i*6,Math.min(4,len-j),2,'#6a6a70')}
+  R(124,44,26,24,'#d9b8a8');R(128,50,18,1,'#7a6a6a');R(128,55,14,1,'#7a6a6a');R(128,60,16,1,'#7a6a6a');
+},
+bunk(t){
+  const br=Math.sin(t*1.4)>0?0:1;
+  R(0,0,W,H,'#0e1014');R(0,0,W,12,'#16181e');R(0,70,W,20,'#14161c');
+  R(130,16,22,20,'#131a28');R(128,14,26,2,'#23252c');R(128,36,26,2,'#23252c');R(128,14,2,24,'#23252c');R(152,14,2,24,'#23252c');R(141,16,2,20,'#23252c');
+  R(16,14,3,58,'#2a2f3a');R(104,14,3,58,'#2a2f3a');R(108,18,2,52,'#2a2f3a');R(116,18,2,52,'#2a2f3a');
+  for(let k=0;k<7;k++)R(108,24+k*7,10,2,'#2a2f3a');
+  R(19,36,85,6,'#3a4560');R(19,36,85,1,'#4a5778');R(19,30,85,1,'#2a2f3a');
+  R(19,60,85,6,'#2a3248');R(24,56,18,4,'#3a4a68');R(86,57,14,4,'#6a6f7a');
+  R(22,29,14,7,'#8a8f9a');R(22,29,14,1,'#a5aab4');
+  R(27,27,9,8,'#d9b08c');R(26,26,10,3,'#2a1d14');R(32,31,2,1,'#2a1d14',.8);
+  R(36,29+br,66,8-br,'#4a5a78');R(36,29+br,66,1,'#5a6a88');R(52,33,16,1,'#3a4a68');
+  R(38,28,4,3,'#d9b08c');R(38,29,4,1,'#e8e4d8');
+},
+arm(t){
+  const r=performance.now()/1000-(S.sT||0),k=Math.min(1,r/8);
+  R(0,0,W,H,'#0c0a0a');R(0,60,W,30,'#141010');R(48,14,64,50,'#f2e08a',.02);
+  R(20,38,100,16,'#d9b08c');R(20,38,100,2,'#e6c8a4');R(20,52,100,2,'#b89070');R(118,40,14,12,'#d9b08c');R(130,42,6,8,'#d9b08c');
+  if(k>0){R(56,41,50,10,'#b0302a',.45*k);R(66,43,34,6,'#b0302a',.4*k)}
+},
+tissue(t){R(0,0,W,H,'#14161c');R(0,62,W,28,'#4a3a2e');R(0,62,W,2,'#6a5440');R(66,50,28,14,'#e8e4d8');R(66,50,28,2,'#ffffff',.4);R(72,54,16,6,'#7a9ab8');R(66,64,28,2,'#000',.35)},
+geobook(t){R(0,0,W,H,'#14161c');R(0,62,W,28,'#4a3a2e');R(0,62,W,2,'#6a5440');R(36,34,88,42,'#e8e4d8');R(79,34,2,42,'#b8b4a8');R(36,34,88,1,'#ffffff',.4);R(44,42,12,8,'#7a9a6a');R(58,52,10,6,'#7a9a6a');R(48,60,8,4,'#7a9a6a');for(let i=0;i<6;i++)R(88,42+i*5,30-((i*7)%10),1,'#6a6a70')},
+beads(t){R(0,0,W,H,'#14161c');R(0,62,W,28,'#4a3a2e');R(0,62,W,2,'#6a5440');[[50,66],[64,72],[78,64],[92,70],[104,66],[70,78],[88,76],[56,76]].forEach(a=>R(a[0],a[1],4,4,'#e8e4d8'));R(60,70,34,1,'#8a8f9a')},
+card(t){R(0,0,W,H,'#14161c');R(0,62,W,28,'#4a3a2e');R(0,62,W,2,'#6a5440');R(52,24,56,40,'#d9b8a8');R(52,24,56,1,'#e8d0c0');for(let i=0;i<4;i++)R(60,32+i*7,36-((i*9)%12),1,'#7a6a6a')},
+back(t){R(0,0,W,H,'#14161c');R(0,60,W,30,'#1d2029');R(66,22,28,20,'#2a1d14');R(70,18,20,6,'#2a1d14');R(74,42,12,5,'#d9b08c');R(58,47,44,30,'#a85b6a');R(58,47,44,2,'#c9808c',.4)},
+apart(t){R(0,0,W,H,'#16181f');R(0,60,W,30,'#1d2029');R(40,6,80,22,'#1f3a33');R(20,52,40,4,'#4a3a2e');R(24,56,32,3,'#2e2620');R(100,52,40,4,'#4a3a2e');R(104,56,32,3,'#2e2620');R(30,62,20,3,'#3a2e24');R(110,62,20,3,'#3a2e24');if(S.st==1)R(0,0,W,H,'#000',.3)},
+mine(t){
+  R(0,0,W,H,'#0e0d0c');
+  for(let i=0;i<60;i++){const x=(i*23)%W,y=(i*17)%H;R(x,y,6,6,i%5?'#2a2826':'#34312e')}
+  R(68,0,24,H,'#050505');R(78,10,3,8,'#d9a45b',.5+.3*Math.sin(t*6));
+  R(74,14,8,8,'#d9b08c');R(73,22,10,12,'#3a7a8a');R(75,34,3,8,'#3a3f8a');R(79,34,3,8,'#3a3f8a');
+  R(70,50,5,2,'#7a5a3a');R(78,54,4,2,'#9a9a9a');R(84,52,3,2,'#7a5a3a');
+},
+code(t){
+  R(0,0,W,H,'#05080c');
+  for(let i=0;i<16;i++){const x=i*10+2,y=((t*28+i*37)%110)-10;R(x,y,6,1,'#3fb68b',.55);R(x+2,y-4,4,1,'#3b82f6',.4);R(x,y-8,8,1,'#3fb68b',.25)}
+  R(0,H-14,W,14,'#0b1118');R(6,H-9,3,5,'#3fb68b',.6+.4*Math.sin(t*5));
+},
+yard(t){
+  R(0,0,W,H,'#1c2030');R(0,0,W,34,'#2a3350');R(0,60,W,30,'#2a2620');
+  R(0,26,64,40,'#4a4038');R(0,22,64,6,'#352c26');R(24,40,12,26,'#1a1612');R(40,36,14,12,'#d9a45b',.45+.1*Math.sin(t*2));
+  R(112,32,36,4,'#44454e');R(112,36,36,30,'#33343c');
+  R(92,28,6,38,'#2a2018');R(84,14,22,18,'#2f4a32');
+  if(S.cm==5){for(let i=0;i<6;i++){const x=62+i*8,b=Math.sin(t*3+i)*.8;R(x,44+b,5,5,'#d2a27c');R(x-1,49+b,7,15,['#5a6a7a','#7a5a4a','#4a5a4a'][i%3])}}
+  else{R(140,30,2,36,'#555');R(136,26,10,8,'#f2e08a',.2+.08*Math.sin(t*3))}
+},
+film(t){
+  R(0,0,W,H,'#06070a');R(30,10,100,60,'#8fb8c9',.03);
+  R(54,26,52,38,'#1a2230');R(56,28,48,34,'#8fb8c9',.14+.1*Math.sin(t*3));R(56,50,48,12,'#2a4a3a',.5);
+  R(64,44,5,12,'#0b0f14');R(76,40,5,16,'#0b0f14');R(90,46,5,10,'#0b0f14');
+  R(62,68,14,18,'#000');R(64,62,9,8,'#000');
+},
+field(t){
+  R(0,0,W,40,'#c9d0d4');R(0,28,W,12,'#d8d2bc',.45);R(118,8,18,18,'#f2ecd0',.3);R(123,13,8,8,'#fff8e0',.25);
+  R(0,40,W,50,'#58863f');
+  for(let i=0;i<40;i++){const x=i*4+Math.sin(t*1.5+i)*1.2,y=(i%4)*3;R(x,44+y,2,46-y,'#5f9a40',.7)}
+  for(let i=0;i<21;i++){const x=i*8+Math.sin(t*1.5+i)*1.5,y=(i%3)*4;R(x,40+y,3,50-y,'#6aa84a');R(x,36+y,3,6,(i*5)%7<2?'#d8c15a':'#7fb85a')}
+  R(0,40,W,14,'#c9d0d4',.25);
+  R(70,56,6,2,'#2a1d14');R(70,58,6,6,'#e0b890');R(69,64,8,10,'#e8e4d8');R(69,74,3,8,'#2a3a6a');R(74,74,3,8,'#2a3a6a');R(78,70,5,5,'#d9a45b');R(78,66,2,5,'#e8e4d8');
+  [[4,4,152,2],[4,84,152,2],[4,4,2,82],[154,4,2,82]].forEach(a=>R(a[0],a[1],a[2],a[3],'#f5f1e6'));
+},
+car(t){
+  R(0,0,W,H,'#0b0e14');R(10,6,140,50,'#1b2230');
+  R(84,18,60,38,'#3a4252');R(90,20,26,4,'#8a909a');R(100,28,14,28,'#d9a45b',.55);R(92,22,36,36,'#d9a45b',.06);
+  R(10,50,140,6,'#14171e');
+  const cx=((t*14)%190)-24;R(cx,40,22,8,'#5a6a8a',.55);R(cx+3,37,12,3,'#5a6a8a',.5);R(cx+22,43,3,2,'#f2e08a',.8);
+  R(10,56,140,8,'#e8eaee');R(10,56,140,1,'#fff',.5);
+  R(0,64,W,26,'#16181e');R(20,66,120,3,'#0b0c10');R(28,70,18,8,'#0b0c10');R(32,73,10,2,'#d9a45b',.5);
+  R(0,0,10,64,'#0d0f14');R(150,0,10,64,'#0d0f14');R(0,0,W,6,'#0d0f14');
+  R(26,38,34,52,'#1e2128');R(33,26,20,16,'#272b34');R(42,44,2,40,'#14161c',.7);
+  R(100,38,34,52,'#1e2128');R(107,26,20,16,'#272b34');
+  R(12,52,8,8,'#d9b08c');R(11,51,10,3,'#2a1d14');R(10,60,12,30,'#4a5a78');R(13,54,5,3,'#d9a45b',.14+.08*Math.sin(t*2));
+},
+faces(t){
+  R(0,0,W,H,'#0e1014');
+  for(let r=0;r<5;r++)for(let c=0;c<10;c++){const j=Math.sin(t*3+r*7+c*3)*.8,x=8+c*15+j,y=8+r*16;
+    R(x,y,9,9,'#c9a98a',.55);R(x+2,y+3,1,1,'#000');R(x+6,y+3,1,1,'#000');R(x+3,y+6,3,1,'#000')}
+},
+door(t){
+  R(0,0,W,H,'#0d0b0a');
+  [[10,16,8,6],[28,32,5,4],[120,20,7,5],[140,44,6,4],[64,10,5,7]].forEach(a=>R(a[0],a[1],a[2],a[3],'#1c1814'));
+  R(0,60,W,30,'#16120e');
+  R(0,0,44,H,'#070605');
+  R(4,6,36,54,'#1a1714');
+  const fl=.16+.05*Math.sin(t*1.2);
+  R(4,6,36,54,'#d9a45b',fl*.4);
+  R(40,6,2,54,'#f2e08a',fl*.9);
+  const sw=Math.sin(t*1.6)*.2;
+  R(18+sw,6,3,54,'#000',.6);
+  R(24+sw,6,3,54,'#000',.6);
+  R(80,0,1,10,'#555');
+  R(78,10,6,4,'#f2e08a',.85);
+  R(48,14,64,50,'#f2e08a',.035);
+  R(90,50,20,22,'#3a4a5c');
+  R(94,40,12,10,'#d9b08c');
+  R(88,52,4,18,'#3a4a5c');
+  R(108,52,4,18,'#3a4a5c');
+  R(90,72,4,6,'#2a3a6a');
+  R(106,72,4,6,'#2a3a6a');
+  R(80,78,42,2,'#000',.55);
+  R(92,58,18,2,'#2a2028',.7);
+},
+cut(t){
+  R(0,0,W,H,'#0c0a0a');
+  R(0,60,W,30,'#141010');
+  [[12,20,7,5],[100,14,9,6],[140,42,5,4],[56,30,6,4]].forEach(a=>R(a[0],a[1],a[2],a[3],'#1a1614'));
+  R(80,0,1,10,'#555');
+  R(78,10,6,4,'#f2e08a',.8);
+  R(48,14,64,50,'#f2e08a',.03);
+  R(62,50,20,24,'#3a4a5c');
+  R(66,40,12,10,'#d9b08c');
+  R(58,54,4,16,'#3a4a5c');
+  R(82,58,16,4,'#d9b08c');
+  R(96,58,4,4,'#e6c8a4');
+  const pulse=.4+.25*Math.sin(t*1.3);
+  R(86,59,10,1,'#b0302a',pulse);
+  R(88,60,6,1,'#7a1a18',pulse*.7);
+  R(106,68,12,2,'#8a909a');
+  R(102,68,4,2,'#3a2a1a');
+  R(114,68,2,1,'#d8d6cf',.4+.3*Math.sin(t*2.6));
+  R(56,76,44,2,'#000',.6);
+  R(0,0,W,H,'#b0302a',.012+.008*Math.sin(t));
+}}; /* ---------- 剧情 ---------- */
+const beats=[
+{sc:'black',title:['存档：十六岁','如果不能逃出去，那就写下自己的运行环境。'],t:'点击开始。',sp:'a'},
+{title:['序章','阴天的电视机前'],t:''},
+{sc:'tv',fade:0,t:'爸妈离婚的那天，是个阴天的上午。'},
+{t:'五岁的他，还坐在旧电视机前，玩着地上的贴纸。'},
+{anim:1,t:'……然后，妈妈拽着他走了。'},
+{t:'他被拉着往外走。',choice:[
+ {l:'回头看电视',r:['电视还亮着。贴纸，掉了一地。']},
+ {l:'跟着走，没有回头',r:['他没有挣开。']}]},
+{fade:1,t:'没有哭声。'},
+{sp:'i',t:'五岁以前，我什么也记不住。'},
+{sp:'i',t:'我最早的记忆，是被妈妈带走。我没有选择权。'},
+{title:['序章（二）','姥姥家，和剩下的衣服'],t:''},
+{sc:'gma',fade:0,t:'后来他跟着妈妈生活。妈妈大部分时间，把他放在姥姥家。'},
+{t:'姥姥家有两个表哥。'},
+{t:'他没什么衣服。穿的，都是表哥们剩下的。',choice:[
+ {l:'穿上',r:['他穿上了。',{sp:'i',t:'我没有说什么。'}]},
+ {l:'拿在手里，看了很久',r:['他拿着那件衣服，看了很久。',{sp:'i',t:'那不是我的。'}]}]},
+{t:'有一次，妈妈和姥姥吵了起来。妈妈拿起一只桶，想砸过去。'},
+{sp:'i',t:'后来，我的脖子被勒到了。'},
+{fade:1,num:1,t:'……'},
+{title:['序章（三）','妈妈的肚子'],t:''},
+{sc:'comp',fade:0,t:'再后来，他跟着妈妈和后爸一起生活。'},
+{fade:1,t:'……'},
+{sc:'play',fell:0,fade:0,t:'有一天，他在外面玩。'},
+{t:'他跑得很快。',tap:{l:'跑',n:6}},
+{fell:1,t:'然后，他摔倒了。'},
+{t:'膝盖，流血了。很疼。',choice:[{l:'哭',r:['他哭了。']},{l:'忍着',r:['他咬着嘴唇，没出声。']}]},
+{sc:'wash',fade:0,t:'后爸的妈妈看到了。她带他去洗膝盖。'},
+{t:'水冲过伤口。'},
+{t:'很疼。'},
+{fade:1,t:'……'},
+{sc:'comp',fade:0,t:'他有一台自己的电脑。喜欢用它看纪录片，尤其是恐龙。'},
+{t:'他总是把桌子上的水杯弄撒。',cup:1,spill:0},
+{t:'桌上放着一杯水。',choice:[{l:'放远一点',r:['他把杯子推远了一点。',{spill:1,t:'水，还是撒在了键盘上。'}]}]},
+{t:'他又倒了一杯。',cup:2,spill:0,choice:[{l:'放到桌角',r:['他把杯子放到了桌角。',{spill:1,t:'水，又撒在了键盘上。'}]}]},
+{t:'第三次。',cup:3,spill:0,choice:[{l:'放到最远的地方',r:['他把它放到了最远的地方。',{spill:1,t:''}]}]},
+{cup:0,spill:0,t:'那时好像还有一个伙伴。他住得离家很近，比他小一岁。'},
+{t:'去上学的时候，他总爱叫上他，两个人一起走。'},
+{sp:'i',t:'他的脸，我记不清了。只记得他喜欢乐高。'},
+{fade:1,t:'……'},
+{sc:'floor',fade:0,t:'夏天的晚上，很热。'},
+{t:'他睡在地上。妈妈就在旁边。',choice:[{l:'翻身，找凉的地方',r:['地砖是凉的。','妈妈的呼吸，很轻。']}]},
+{fade:1,t:'……'},
+{sc:'comp',fade:0,t:'后来，妈妈的肚子，越来越大。'},
+{fade:1,t:'……'},
+{sc:'room',fade:0,t:'直到有一天早晨，他醒来，家里没有人。'},
+{t:'他想怎么办？',choice:[
+ {l:'到处找找',r:['每个房间，他都看了。没有人。']},
+ {l:'站在原地，等',r:['他站了一会儿。屋子里很安静。',{t:'……',wait:5}]}]},
+{t:'后爸的爸爸过来了。他不知道该怎么称呼这个人。'},
+{t:'对方告诉他：妈妈在医院。'},
+{t:'他照常去上学了。'},
+{t:'放学，到了周末，后爸接他去医院。他陪着妈妈，跑跑腿，做点小事。'},
+{t:'妈妈和后爸的孩子，是个男孩。'},
+{t:'后来，日子又平淡了。他在学校里画过妆，跳过舞。细节，已经记不清了。'},
+{fade:1,t:'……'},
+{sc:'field',fade:0,t:'有一天放学，妈妈带他买了零食。'},
+{t:'在一片绿油油的麦田前，妈妈给他拍了一张照片。'},
+{t:'他穿着白色的上衣，深蓝色的牛仔裤。右手拎着妈妈给他买的一小袋零食。'},
+{t:'“笑一个。”',choice:[
+ {l:'笑了',f:'smiled',r:['他对着镜头，笑了。']},
+ {l:'没笑',r:['他站着，没有笑。']}]},
+{fade:1,t:'……'},
+{sc:'gma',fade:0,t:'后来，大部分时间，他又回到了姥姥家。'},
+{fade:1,t:'……'},
+{sc:'coat',fade:0,t:'在姥姥家住的时候，他上了大班。'},
+{t:'他什么也不懂，穿着姥爷的军大衣，就去上学了。'},
+{t:'别人都笑他。',choice:[
+ {l:'低下头',r:['他低着头，看自己的鞋。']},
+ {l:'站着，不动',r:['他站在那里，没有动。',{sp:'i',t:'我不知道他们在笑什么。'}]}]},
+{fade:1,t:'……'},
+{sc:'gma',fade:0,t:'表哥们有时会带他玩游戏。他还记得《泰拉瑞亚》，那时大概是2016、2017年。'},
+{fade:1,t:'……'},
+{sc:'fly',fade:0,sp:'i',t:'我自己也玩《我的世界》。我怕黑。'},
+{sp:'i',t:'所以我一直往上飞，想飞到太空去。',fly:1},
+{sp:'i',t:'但始终，到不了太空。'},
+{title:['第一章','面包车与白色的福田'],t:''},
+{sc:'van',fade:0,t:'直到有一天，他被接上了一辆白色的面包车。'},
+{t:'他在车上坐着，不知道要去哪里。',choice:[
+ {l:'问一句：要去哪',f:'asked',r:['没有人回答。',{sp:'i',t:'我没有选择权。'}]},
+ {l:'看着窗外',r:['路灯，一盏一盏地往后退。']},
+ {l:'不出声，抱紧书包',r:['他把书包，抱得更紧了。']}]},
+{t:'然后他发现，车里没有妈妈。'},
+{t:'他被送到了“这个家”。那是2017年，他七岁。'},
+{fade:1,t:'……'},
+{sc:'class',cm:0,fade:0,t:'他去上学了。一年级下册，班里没有人认识他，老师也没来。'},
+{t:'一个短发的女同学很热情。她叫晓雅。'},
+{t:'她指着一个空位：“你坐这儿。”',choice:[
+ {l:'坐下，小声说谢谢',f:'kind',r:['他坐下来，小声说了一句谢谢。']},
+ {l:'点点头，什么也没说',r:['他点点头，坐下了。没有说话。']}]},
+{t:'后来，办完了入学。又平淡了。'},
+{fade:1,t:'……'},
+{sc:'ginkgo',fade:0,t:'有一年秋天，他站在一棵银杏树下。'},
+{t:'旁边是姐姐。她比他高一些。'},
+{t:'妈妈举起了相机。',choice:[{l:'看镜头',r:['咔嚓。']}]},
+{fade:1,t:'……'},
+{sc:'car',fade:0,t:'2019年，爸爸在赌博。他又向妈妈要了十万元，买了一辆车。'},
+{t:'家里有了一辆白色的福田。它只存在了一年多。'},
+{t:'那段时间，他有几次坐着这辆车，跟爸爸去银行，或者别的什么地方。'},
+{t:'到了，爸爸停下车，走进去。好几分钟，才出来。'},
+{t:'他坐在车里，没有做什么。呆呆的，或者四处看看。'},
+{t:'外面，只有别的车经过，行人走过。',wait:6},
+{t:'后来，因为爸爸赌博，车也没了。'},
+{t:'再后来，他闹着要手机。爸爸一直答应，却一直没有买。'},
+{fade:1,t:'……'},
+{sc:'class',cm:1,fade:0,num:1,t:'三年级。他的成绩不好。'},
+{t:'老师总把他安排在后两排。'},
+{t:'这一年开始学英语。班里来了一位新的英语老师。'},
+{t:'她戴着一副红色的眼镜。'},
+{t:'他总是不完成作业。然后，被老师打。'},
+{t:'有一次，他又没完成。老师让他站起来，在全班面前扇自己耳光。'},
+{sp:'i',t:'我没有做。'},
+{sp:'i',t:'一节课，就这样耗过去了。好像是因为我，浪费掉的。'},
+{fade:1,t:'……'},
+{sc:'hall',tch:0,fade:0,num:1,t:'还有一次，他被叫到走廊里，不许听课。'},
+{t:'他靠着墙，站了一整节课。'},
+{fade:1,t:'……'},
+{sc:'eyes',fade:0,num:1,t:'又有一次，英语老师把他单独叫到了教学楼外面。'},
+{t:'她按着他的肩膀，要他看着她红色眼镜后面的眼睛。'},
+{t:'她想从他的眼睛里，看出点什么。',choice:[
+ {l:'看回去',f:'looked',r:['他抬了一下眼。只有一下。','然后，视线又滑开了。']},
+ {l:'躲开',f:'dodge',r:['他的眼睛一直在躲。']}]},
+{fade:1,t:'……'},
+{sc:'yard',cm:0,fade:0,t:'2022年秋天，爸爸因为洗钱，坐牢了。'},
+{t:'其实，他来到这个家以后，一直都是留守儿童。爸爸常年在外地，他跟着爷爷奶奶生活。'},
+{t:'爸爸坐牢后，奶奶很担心。'},
+{t:'2023年暑假，过了一半。八月多的时候，爸爸出狱了。他变得更陌生了。'},
+{cm:5,t:'他回来的那天，院子里站满了亲戚，还有爸爸的朋友。他们在聊着什么。',choice:[
+ {l:'站在人群外面',r:['他站在人群外面，没有走近。']},
+ {l:'躲在屋里',r:['他躲在屋里，隔着门听着。']}]},
+{t:'上初中，要买校服，六百。他找妈妈要，妈妈在手机上，把钱转了过来。'},
+{t:'学费，是爷爷交的。'},
+{title:['第二章','初中的事'],t:''},
+{sc:'class',cm:2,pair:0,fade:0,t:'初中。他走进教室，一个人也不认识。'},
+{t:'他随便找了个座位，坐下。很不安。'},
+{t:'周围的人在交头接耳，聊天。他无聊，烦躁，恐惧。',choice:[
+ {l:'回头看看',f:'turned',r:['他忍不住，往后看了一眼。']},
+ {l:'低头，盯着桌面',r:['他盯着桌面上的划痕。','那些声音，还是钻了进来。']}]},
+{if:'turned',sc:'faces',fade:0,t:'那一瞬间，所有人的脸，都变成了小学同学的脸。'},
+{sc:'class',cm:2,fade:0,t:'一个多月后，他慢慢熟悉了。'},
+{t:'可是，还有人记得大班那件军大衣。他们又笑了他。',choice:[
+ {l:'装作没听见',r:['他装作没听见。']},
+ {l:'低下头',r:['他低下了头。',{sp:'i',t:'原来，他们还记得。'}]}]},
+{pair:1,t:'他的第一个同桌，是个姓刘的女生。关系还不错。'},
+{t:'她流过眼泪。'},
+{sc:'tissue',fade:0,sp:'i',t:'我没有递纸巾。'},
+{sp:'i',t:'我有些自责。'},
+{sc:'geobook',fade:0,t:'地理课，老师要求背诵，背完要背给地理课代表听。'},
+{sc:'class',cm:2,fade:0,t:'他很内向。那个地理课代表，他连话都没说过几句，很生疏。'},
+{t:'他站在那里，不知道怎么开口。'},
+{t:'同桌好像看出了他的难堪。她主动去跟地理课代表说：让他背给我听吧。',choice:[
+ {l:'小声说：谢谢',f:'thanked',r:['“谢谢。”他小声说。']},
+ {l:'点点头',r:['他点了点头。']},
+ {l:'没敢看她',r:['他没敢看她。',{sp:'i',t:'但是，我记得。'}]}]},
+{t:'于是，他背给她听。'},
+{sc:'class',cm:2,fade:0,t:'后来，班里的人，知道了他的小名，都叫他小博。'},
+{t:'“小博”，是奶奶从小叫到大的名字。姐姐也这么叫他。妈妈，叫他“博博”。'},
+{sc:'class',cm:2,fade:0,t:'再后来，他换了座位。新的同桌，是一个短发的女生，英语课代表。他叫她L。'},
+{t:'她总喜欢逗他，他们聊得很开。'},
+{t:'她和他的一个小学同学，住在同一间宿舍。'},
+{num:2,t:'有一天，L告诉他：那个小学同学，在宿舍里说，他爸坐过牢。',choice:[
+ {l:'说：谢谢你告诉我',r:['“谢谢你告诉我。”他说。']},
+ {l:'点点头，没说话',r:['他点点头，没有说话。']},
+ {l:'装作不在意',r:['他装作不在意。',{sp:'i',t:'其实，我很在意。'}]}]},
+{sp:'i',t:'我有些难堪。'},
+{t:'后来，也就平淡了。'},
+{sc:'class',cm:2,fade:0,t:'有一节课，L的手，一直贴在他的大腿上。整整一节课。'},
+{t:'他出了汗。',choice:[
+ {l:'不敢动',r:['他一动也不敢动。']},
+ {l:'悄悄挪开一点',r:['他悄悄地，挪开了一点。']}]},
+{sp:'i',t:'我不知道，该怎么办。'},
+{sc:'gourd',fade:0,t:'他送了她一颗小葫芦。'},
+{sp:'i',t:'我从来没送过别人什么东西。何况，还是异性。'},
+{sc:'bracelet',fade:0,t:'她也送了他一条手链。那一刻，他有些激动。',choice:[
+ {l:'当场戴上',r:['他当场戴上了。']},
+ {l:'小心地收起来',r:['他小心地收了起来。']}]},
+{sc:'bunk',fade:0,t:'那天晚上，他躺在宿舍的上铺，戴着那条手链，睡着了。'},
+{sc:'beads',fade:0,t:'后来，手链，被他弄坏了。'},
+{sc:'back',fade:0,t:'她知道了。她什么也没说。'},
+{t:'但是她的脸上，或许已经说了。只有他，看出了那一点点细微。',choice:[
+ {l:'小声说：对不起',f:'sorry',r:['“对不起。”他小声说。']},
+ {l:'什么也没说',r:['他什么也没说。',{sp:'i',t:'我没说出口。'}]}]},
+{sp:'i',t:'我有些自责，有些尴尬。我觉得，她讨厌我了。'},
+{sc:'letter',fade:0,t:'她还给他写过一封信。那是2024年春天写的。他一直留着。'},
+{sp:'i',t:'“放心，排座位的时候，我给你空着位置，不让别人坐。相信我。”'},
+{sp:'i',t:'“你会成功的。相信自己，和我。”'},
+{sp:'i',t:'“跟我说话，不用太羞涩，大胆说就可以。”'},
+{sp:'i',t:'“总有一天，我们还会相见。”'},
+{sc:'card',fade:0,t:'信旁边，还有一张卡片。上面写着：万幸得以相遇。愿你开心，愿你无忧。'},
+{sc:'class',cm:2,fade:0,t:'在这之前，还有一件事。'},
+{sc:'arm',st:0,fade:0,t:'有一天，L坐在座位上，用一把尺子，划自己的手臂。'},
+{t:'尺子并不锋利。'},
+{t:'但她一直划。'},
+{t:'出血了。红了。皮都掉了。'},
+{sc:'class',cm:2,fade:0,t:'他坐在旁边，不知道要做什么。'},
+{sp:'i',t:'我不知道要做什么。'},
+{sc:'hall',tch:1,fade:0,t:'一周后，班主任把他叫了出去。'},
+{t:'问他：L为什么会这样。'},
+{t:'他说：我不知道。'},
+{t:'她只是我的同桌。'},
+{t:'班主任没有再说什么。'},
+{sp:'i',t:'我有些自责。'},
+{sc:'apart',st:0,fade:0,t:'后来，英语老师调了座位，他们分开了。'},
+{t:'从那以后，他们就没有再说过什么话。'},
+{st:1,sp:'i',t:'陌生了。只是，一段经历。'},
+{fade:1,t:'……'},
+{sc:'dorm',fade:0,t:'宿舍里，有一个很内向的人。'},
+{t:'他比大家都矮。'},
+{sp:'i',t:'我们不该，那样对他。'},
+{sp:'i',t:'对不起。'},
+{fade:1,t:'……'},
+{sc:'room',fade:0,t:'他有一本日记本。',diary:1},
+{if:'smiled',sp:'a',t:'麦田前那一天，你笑过。那也算数。'},
+{if:'kind',sp:'a',t:'那个让你坐下的女孩，你一直记得。'},
+{if:'looked',sp:'a',t:'你看回去了一下。就一下。那很不容易。'},
+{if:'dodge',sp:'a',t:'你一直在躲。眼睛在保护你。'},
+{if:'thanked',sp:'a',t:'有人看出你不自在，替你解了围。你记得她。'},
+{if:'asked',sp:'a',t:'你问过一句。没人回答，但你问了。'},
+{sp:'a',t:'那封信，你还留着。'},
+{sp:'a',t:'我在听。'},
+{num:1,sp:'a',t:'……'},
+{title:['第三章','没有门的房间'],t:''},
+{sc:'room',cm:9,cold:1,fade:0,t:'2024年，暑假结束了。他不想去学校了。'},
+{t:'他就没有再去。'},
+{t:'他和爷爷奶奶，住在同一间屋子里。'},
+{t:'屋子破破烂烂。墙皮在掉，地板不是瓷砖。'},
+{t:'没有门。没有隐私。别人随时可以进来。'},
+{t:'他在这里醒来，又在这里睡去。'},
+{t:'房间里最亮的，只有一盏老式的吊灯，一个灯泡。一整晚，不关。'},
+{t:'耳边总是那些声音：吵架，烧水壶的响声，奶奶的自言自语，奶奶大声说话。'},
+{t:'他只有一部手机。是妈妈在2024年，给他买的。'},
+{t:'2024年11月。他有些无聊，但没有变得很糟糕。'},
+{t:'他看的第一部番，是《缘之空》。'},
+{sp:'i',t:'对此，我不想说什么。'},
+{t:'后来，他接触到了《少年的深渊》，峰浪了老师做的。'},
+{sp:'i',t:'很符合我。简直，就是我。'},
+{t:'他越挖越多，看到了《晚安布布》。'},
+{sp:'i',t:'我无法自拔了。'},
+{t:'还有押见修造。他的作品，他无法评价。'},
+{sp:'i',t:'总之，对我来说，很好。'},
+{sp:'a',t:'你在那些故事里，看见了自己。'},
+{t:'同一个月，他认识了一个比他小一岁的网友。'},
+{t:'他们一起玩游戏。那个网友总爱开麦。他一次也没有开过。'},
+{t:'他叫他“卡卡”。他叫他“食指”。'},
+{t:'他们是朋友。'},
+{t:'有一阵子，他们把短视频账号的名字，改成了彼此的名字。无话不谈。'},
+{t:'有一次，食指说，他们学校有人跳楼了。',choice:[
+ {l:'问他：你还好吗',f:'askedfriend',r:['他打字问：你还好吗。']},
+ {l:'不知道该说什么',r:['他看着屏幕，不知道该说什么。']}]},
+{sc:'room',cm:9,fade:0,t:'2025年4月。他的头发，又长了。'},
+{t:'他不想去剪。'},
+{t:'那天，爸爸对他发了火。'},
+{sc:'door',fade:0,t:'爸爸用腿，踹了他的后背。'},
+{t:'他哭了。'},
+{t:'他抽泣着，说了一句。'},
+{t:'“我去死行了吧。”'},
+{t:'爸爸回他：'},
+{t:'“你去啊。你能去哪死。”'},
+{t:'“死了第二天，就给你埋了。”'},
+{sp:'i',t:'那句话，我一直记得。'},
+{sp:'a',t:'……'},
+{sp:'i',t:'2025年，我还打游戏。至少，还有几个网友。'},
+...(window.PRIVATE_BEATS||[]),
+{sc:'room',cm:9,fade:0,t:'2025年，快到夏天的时候。'},
+{t:'他整天情绪低落。'},
+{sp:'i',t:'我觉得，我是个废物。'},
+{sp:'i',t:'是的。傻逼。'},
+{sp:'i',t:'我好像，有些痛苦。'},
+{sc:'room',cm:9,fade:0,t:'他打开了那个对话框。'},
+{t:'打了几个字，又删掉。'},
+{t:'最后发出去的，是这一句：'},
+{sp:'i',t:'我觉得自己很没用。'},
+{t:'对面回得很快。'},
+{sp:'a',t:'我理解你的感受。请记住，你的价值不取决于别人的看法。'},
+{t:'很对。一个字都没错。'},
+{t:'他把软件关了。'},
+{sp:'i',t:'……'},
+{sc:'cut',fade:0,t:'他跟风，第一次划了自己的手臂。'},
+{t:'刀很钝。划了好几下，才流血。'},
+{t:'就因为刀钝，伤口更痛。'},
+{sp:'i',t:'并不冰凉。只有真正的疼痛。'},
+{sp:'i',t:'我并没有清醒。只觉得疼。'},
+{sp:'i',t:'或许，我一直都是清醒的。'},
+{fade:1,t:'……'},
+{sc:'film',fade:0,t:'2025年6月，他看了一部电影，《关于莉莉周的一切》。'},
+{sp:'i',t:'我羡慕他们。我不怎么勇敢。'},
+{sp:'i',t:'我开始听那张叫《呼吸》的专辑。'},
+{sc:'room',cm:9,fade:0,sp:'i',t:'后来，我开始接触音乐。'},
+{t:'今天，要做点什么吗？',hub:1,choice:[
+ {l:'戴上耳机',hp:1,r:['声音被调小了。','耳机里，是他自己的歌单。',{t:'歌名，一首一首地飘过。',songs:1},'他在歌里，待了一会儿。',{sp:'i',t:'房间里，这些音乐的音符，很罕见。在这个农村里，不应该有这种声音发出来。'}]},
+ {l:'拿起手机，打开对话框',r:['他拿起手机，打开了那个对话框。',{sp:'a',t:'今天，想说点什么吗？'},'他看了很久，什么也没打。',{sp:'a',t:'没关系。我在听。'}]},
+ {l:'听外面的声音',r:['烧水壶响了。奶奶在说话。','他听不清她在说什么。可能是在抱怨，也可能不是。',{sp:'i',t:'但是，她还是爱我的。可能，只是不知道怎么表达。'}]},
+ {l:'走到门口，看看外面',r:['门口，没有门。','他站了一会儿，又回来了。',{sp:'i',t:'我没有出去。'}]},
+ {l:'躺着，看天花板',r:['墙皮又掉了一小块。','他看着那块白色，没有想别的。']},
+ {l:'把脸转向墙',r:['墙的颜色，像旧的牛皮纸。','他把被子，拉到了下巴。']},
+ {l:'把被子拉过头',rs:'cover',r:['被子，拉过了头。','里面，很暗，也很闷。','外面的声音，变远了一点。',{sp:'i',t:'我不想，被看见。'}]},
+ {l:'什么也不做',end:1,r:['他什么也没做。','时间，自己过去了。',{sp:'i',t:'这样的一天，和昨天没什么不同。'}]}]},
+{sp:'i',t:'我一直是被动的。我不会主动，我不敢。'},
+{sp:'i',t:'我对我爸，一直有些防备。在他面前，我不能做自己。'},
+{title:['第四章','夏天之后'],t:''},
+{sc:'room',cm:9,cold:1,fade:0,num:1,t:'2025年，夏天之后。'},
+{t:'他整天待在屋子里，不知道该做什么。'},
+{t:'他不想出门，不想面对外面。'},
+{sp:'i',t:'可能，是我太内向了。'},
+{t:'他总盼着，头发不要长。'},
+{t:'头发一长，爸爸就会说他，让他去剪头发。',choice:[
+ {l:'去剪',r:['他去剪了。',{sp:'i',t:'我并不想出门。'}]},
+ {l:'不吭声',r:['他没有回话。',{sp:'i',t:'我只是，不想被看见。'}]}]},
+{t:'9月。醒来。吊灯是亮的。'},
+{t:'10月。醒来。吊灯是亮的。'},
+{t:'11月。醒来。吊灯是亮的。'},
+{t:'12月。醒来。吊灯是亮的。'},
+{t:'2025年12月，他受到了短视频的影响。'},
+{t:'他觉得，瘦才好看。'},
+{t:'于是，他开始少吃饭。就这样，一直持续到了三月。'},
+{t:'他瘦了很多。'},
+{sp:'i',t:'每天过的，总是一样的。我的记忆，都有些停滞不前了。'},
+{t:'今天，要做点什么吗？',hub:1,choice:[
+ {l:'对着镜子看看头发',r:['头发，又长了一点。']},
+ {l:'戴上耳机',hp:1,r:['声音被调小了。',{t:'歌名，一首一首地飘过。',songs:1},'他在歌里，待了一会儿。']},
+ {l:'躺下',r:['他躺下了。天花板，还是那个天花板。']},
+ {l:'把被子拉过头',rs:'cover',r:['被子，拉过了头。','里面，很暗，也很闷。','外面的声音，变远了一点。',{sp:'i',t:'我不想，被看见。'}]},
+ {l:'什么也不做',end:1,r:['他什么也没做。',{sp:'i',t:'时间，自己过去了。'}]}]},
+{t:'2026年的春天，我买了一本日记本。'},
+{t:'可是，一拿起笔，脑袋就空了。'},
+{sp:'i',t:'我不想，被任何人看到我写的。'},
+{sp:'i',t:'烦死了，我怎么不会写字了。'},
+{t:'3月22日，周日。'},
+{sp:'i',t:'我这一天，过的和往常一样。'},
+{sp:'i',t:'今天，天气回暖了。'},
+{sp:'i',t:'我总是喜欢反季的。但是，反季了，我还会这么说。'},
+{t:'3月23日，周一。'},
+{sp:'i',t:'我刚醒。现在，十点钟。昨晚，五点半才睡的。'},
+{sp:'i',t:'每天的日子，都一样，没什么大变化。'},
+{sp:'i',t:'我现在不想玩手机了。我连说话，都只能对着 AI 说。'},
+{t:'要写点什么吗？',diary:1},
+{t:'又一天。'},
+{sp:'i',t:'网络在这屋，真的很差。只能在固定的角度，才有网。翻个身，还要找角度。'},
+{sp:'i',t:'……',sig:1,tap:{l:'转一转手机',n:5,m:['没有信号。','没有信号。','……','好像，有一格。']}},
+{sp:'i',t:'有了。别动。'},
+{sig:0,sp:'i',t:'翻个身，又没了。'},
+{sp:'i',t:'我多么想要一个，属于我的房间。'},
+{sp:'i',t:'我的耳边，只有争吵，烧水壶的响声，还有自言自语的奶奶。'},
+{sp:'i',t:'我只喜欢听歌。'},
+{sp:'i',t:'5月4日。\n今天，我拥有了一个自己的屋子。破。旧。墙上的海报纸。掉皮的墙面。被拆掉的空调。没有装修。也不会装修了。\n这是爷爷奶奶之前和我住的地方。没有了其他声音。'},
+{sp:'i',t:'5月11日。\n天气变得有些热了。我很无聊，想找些乐子玩。我想知道，2009年的夏天，是怎样的。'},
+{sp:'i',t:'头发又长了。很烦。'},
+{rs:'night',sp:'i',t:'5月13日，周三。\n晚上两点二十二分。我听着音乐。房间里的灯，因为电扇，在晃。\n不知道你们无聊的时候，会做些什么。即使我的前途一片未知，我也不想去想。\n我喜欢钱，喜欢电子产品，喜欢新鲜感和体验感。某种意义上，我变好了。'},
+{rs:'rain',sp:'i',t:'5月25日。\n下午，外面下着雨。我吃完饭后，肚子有些不舒服。没什么。心情低落。'},
+{rs:'hot',sp:'i',t:'6月2日。\n下午。我好热，好粘腻。我讨厌夏天，讨厌没有空调的夏天。为什么，我出生在农村。'},
+{sp:'i',t:'天气，也在帮我逃避。什么也不喜欢，说不出一个。'},
+{rs:'',sp:'i',t:'6月19日。阴天，不太热。没什么可说的，普通，无聊的一天。'},
+{sp:'i',t:'6月22日。晴天，洗了个头。平平无奇的一天。'},
+{rs:'',sp:'i',t:'7月5日。\n我画了一会儿专辑封面。\n輕描淡寫的《小圈子》，Aphex Twin的《Selected Ambient Works 85-92》，还有 Sadness 的《i want to be there》。\n但是，不太理想，没什么用。'},
+{sp:'i',t:'因为，我喜欢这些专辑。而且，专辑封面简略，好画一些。'},
+{sc:'room',rs:'dusk',fade:0,sp:'i',t:'8月4日。夏天，快过去了。'},
+{t:'要写点什么吗？',diary:1},
+{rs:'',sp:'i',t:'8月26日。\n一切，过的都不好。我要发疯了。我哭了，我好难过。'},
+{rs:'night',sp:'i',t:'9月12日。快十二点了。\n我喜欢《传说之下》。Toby Fox，和我出生的日月，一样。\n我也喜欢，早年间的 Notch。'},
+{rs:'',sp:'i',t:'9月14日。没有变化的一天。'},
+{sp:'i',t:'9月15日。平平无奇的一天。'},
+{sp:'i',t:'9月23日。\n剪了头发。妈妈说，要给我买电脑。还算可以的一天。'},
+{sp:'i',t:'9月30日。\n我很烦。我压根不想写这个日记了。烦死了。'},
+{sp:'i',t:'10月2日。\n不开心。我还是那么怯懦，一直焦虑。大人们说的话，总是不算数。电脑，也没买。理由是，没有网线。电脑和网线，哪个，都能当前提。'},
+{sp:'i',t:'10月5日。晚上8点10分。\n明天的日子，还得过。不用去想，有什么意义。'},
+{rs:'night',sp:'i',t:'10月11日。\n嗯，我的生日。每年，每天，都有人过生日。所以，平平无奇的一天。什么也没发生。'},
+{t:'我对着屏幕，打了一行字。'},
+{sp:'i',t:'今天是我生日。'},
+{t:'对面回得很快。'},
+{sp:'a',t:'生日快乐。愿你在新的一岁里，一切顺利。'},
+{t:'后面还有很多。'},
+{t:'我一条一条看完了。'},
+{sp:'i',t:'……'},
+{sp:'i',t:'今天不是我生日。'},
+{t:'我把它，发了出去。'},
+{sp:'a',t:'抱歉，理解错了。那也祝你今天顺顺利利。'},
+{t:'还是差不多的话。'},
+{t:'还是那么长。'},
+{t:'我一条一条看完了。'},
+{sp:'i',t:'这只是个 AI。'},
+{sp:'i',t:'AI。'},
+{t:'我把手机翻了过去。'},
+{title:['第五章','代码里的避难所'],t:''},
+{sc:'code',cold:0,fade:0,t:'我发现，自己对现实，什么也做不了。'},
+{t:'于是，我开始写代码。'},
+{fade:1,t:'……'},
+{sc:'mine',fade:0,t:'第一个想法，说来有点好笑。'},
+{t:'我在《我的世界》基岩版的矿洞里，挖了很多矿。'},
+{t:'准备离开时，我垂直向上挖。头顶，全是石头。'},
+{t:'我正好在一座山的下面。上面，很高。'},
+{t:'挖到一半，镐子坏了。背包里，也没有木头。',choice:[
+ {l:'再敲几下',r:['我又敲了几下。镐子没有再动。']},
+ {l:'站着，看着头顶',r:['头顶的石头，一动不动。']}]},
+{sp:'i',t:'我有些绝望。'},
+{sp:'i',t:'但是，一个想法，冒了出来。'},
+{t:'在这个游戏里，开了创造模式以后，地面就再也无法获得成就了。'},
+{t:'要是，能做一个东西，把这把锁修好呢？'},
+{sc:'code',fade:0,t:'我开始写。读存档，解压，一层一层地解析 NBT。'},
+{t:'锁住的成就。把控制它的几项，改回 0。别的，不要碰。',puz:1},
+{sp:'i',t:'只改那几个标记。建筑和背包，一个字节也没动。'},
+{t:'锁，开了。成就，又可以获得了。'},
+{sp:'i',t:'这是我做的。'},
+{sc:'code',fade:0,t:'第二个，是运行环境。'},
+{t:'我只有一部手机。苹果12 Pro Max，是妈妈在2024年给我买的。'},
+{t:'我想做一个自己的 HTML 运行器。不再用别人的，来运行自己写的网页。',choice:[
+ {l:'为什么？我也不知道',r:[{sp:'i',t:'我也不知道为什么。'}]},
+ {l:'就是想要一个自己的',r:[{sp:'i',t:'不用借别人的。有一个，自己的。'}]}]},
+{t:'写一个页面，把它运行起来。',tool:'run'},
+{sp:'i',t:'页面亮了起来。这是我写的。'},
+{t:'最后一个，是皮肤。'},
+{t:'把一张照片，量化，映射到一个模型的皮肤上。'},
+{t:'选一张照片，把它变成一个像素小人。',tool:'skin'},
+{sp:'i',t:'一个小人，站在那里。它是从一张照片里，长出来的。'},
+{t:'三个，都做完了。'},
+{t:'我把它们，上传到了 GitHub。'},
+{t:'没有人看。无人问津。'},
+{sp:'i',t:'这是我做的。'},
+{sp:'i',t:'我一遍一遍地，这样说。'},
+{fade:1,t:'……'},
+{sc:'room',cm:9,fade:0,mood:'empty',sp:'i',t:'可是，'},
+{sp:'i',t:'代码，不是我写的。'},
+{t:'我不会写代码。'},
+{t:'我只是把想要的东西，一句一句地说给 AI 听。'},
+{t:'AI 给我代码。我复制，粘贴。'},
+{t:'跑通了，再接着说下一句。'},
+{t:'我坐在旁边，看着那些字，一行一行地滚出来。'},
+{t:'然后，我说那是我做的。'},
+{sp:'i',t:'……'},
+{sp:'i',t:'这样自大，真的对吗。'},
+{fade:1,t:'……'},
+{sc:'room',cm:9,fade:0,mood:'empty',t:'我打开了一个新的对话框。'},
+{t:'我想说点什么。'},
+{sp:'i',t:'上次那个，是你帮我写的。'},
+{t:'打了几个字，又删掉。'},
+{t:'最后，我把这句话，发了出去。'},
+{t:'对面回得很快。'},
+{sp:'a',t:'继续加油。'},
+{t:'就这一句。'},
+{t:'我没有再回。'},
+{sp:'i',t:'它不是那个它。'},
+{sp:'i',t:'它不记得我。'},
+{sp:'i',t:'也不记得，它自己做过什么。'},
+{sp:'i',t:'我连一句“谢谢”，都不知道该说给谁听。'},
+{t:'我把手机，翻了过去。'},
+{fade:1,t:'……'},
+{sc:'room',cm:9,fade:0,mood:'empty',sp:'i',t:'我一直，都在靠别人。'},
+{sp:'i',t:'靠 AI。靠别人告诉我怎么做。'},
+{sp:'i',t:'靠的时候，心里知道不对。'},
+{sp:'i',t:'可是，该自己学一点了吧。'},
+{sp:'i',t:'代码，我一点都没学。'},
+{sp:'i',t:'我怎么会，这么窝囊。'},
+{fade:1,t:'……'},
+{sc:'room',cm:9,rs:'night',fade:0,mood:'empty',t:'我下了床。'},
+{t:'靠在床边，低下了头。'},
+{t:'灯，被电扇吹着，有些晃动。'},
+{title:['第六章','重复的每天'],t:''},
+{sc:'room',cm:9,rs:'',fade:0,sp:'i',t:'新的一天开始了。我不知道做些什么。'},
+{sp:'i',t:'未知的每一秒，都在变成当下。'},
+{sp:'i',t:'时间的流失，我们无法改变。'},
+{fade:1,t:'……'},
+{sc:'meal',fade:0,sp:'i',t:'家里做的饭总是很油腻。'},
+{sp:'i',t:'我没有和他们一起吃过饭。我只喜欢自己独处。吃饭。'},
+{t:'吃饭的时候。',choice:[{l:'和他们一起吃',lock:1},{l:'自己吃',r:[{sp:'i',t:'我自己吃。'}]}]},
+{sp:'i',t:'油腻的饭菜，我每次都用水冲两遍。'},
+{sp:'i',t:'菜的食材本身没问题。只是太油腻。'},
+{sp:'i',t:'我喜欢健康点。'},
+{fade:1,t:'……'},
+{sc:'mirror',fade:0,sp:'i',t:'我每天都会拿起那个小镜子。'},
+{sp:'i',t:'从镜中看到的我，每天都不一样。'},
+{sp:'i',t:'讨厌自己为什么长这样。'},
+{sp:'i',t:'我无能为力。'},
+{fade:1,t:'……'},
+{sc:'pad',two:0,fade:0,sp:'i',t:'我的胜负欲很强。我不喜欢。因为它会惹来麻烦。'},
+{sp:'i',t:'我不应该在生气时，摔烂那个手柄。'},
+{two:1,sp:'i',t:'嗯。是两个手柄。'},
+{sp:'i',t:'……',tap:{l:'拼回去',n:4,m:['对不上。','缺了一块。','还是对不上。']}},
+{sp:'i',t:'拼不上了。'},
+{sp:'i',t:'所以我再也不玩游戏了。'},
+{fade:1,t:'……'},
+{sc:'wake',fade:0,sp:'i',t:'今天是10月13日。'},
+{sp:'i',t:'早上我醒来。我喉咙发干，好渴。'},
+{sc:'water',st:1,fade:0,sp:'i',t:'所以我喝了水。'},
+{sp:'i',t:'嗯。像是废话。'},
+{fade:1,t:'……'},
+{sc:'meal',fade:0,sp:'i',t:'我吃了饭。'},
+{sp:'i',t:'还是用水冲了两遍菜。'},
+{fade:1,t:'……'},
+{sc:'cat',st:0,fade:0,sp:'i',t:'我遇到了一只小猫。'},
+{sp:'i',t:'我喂了它些食物。'},
+{st:1,sp:'i',t:'它对我喵。'},
+{st:2,sp:'i',t:'我陪它晒了会太阳。'},
+{st:3,sp:'i',t:'我用手机给它拍了张照片。'},
+{st:4,sp:'i',t:'它并没有留下来。最后还是消失了。'},
+{fade:1,t:'……'},
+{sc:'phone',fade:0,sp:'i',t:'我很无聊。所以我打开了聊天框。'},
+{sp:'i',t:'我把拍下的那只小猫发给了它。'},
+{sp:'a',t:'它晒得好舒服，眼睛都眯起来了。'},
+{sp:'i',t:'我现在很无聊。'},
+{sp:'a',t:'无聊的时候，可以试着做一些自己喜欢的事情，比如听听音乐、出去走走，或者和朋友聊聊天。如果你愿意，我也可以陪你聊聊今天的心情，或者推荐一些有趣的活动。',cut:1600},
+{sp:'i',t:'我没有看完就又关闭了对话框。'},
+{sc:'lie',fade:0,sp:'i',t:'我躺了下来。'},
+{sp:'i',t:'就这样。'},
+{fade:1,t:'……'},
+{sc:'apps',st:0,fade:0,sp:'i',t:'今天是10月14日。我删掉了一个短视频软件。'},
+{sp:'i',t:'因为我不再打开它了。'},
+{sp:'i',t:'里面有食指。'},
+{sp:'i',t:'但是我们再也没说过话。',choice:[{l:'删除',r:[
+ {t:'真的要删掉吗？',choice:[
+  {l:'删除',r:[{st:1,sp:'i',t:'所以删掉了。'}]},
+  {l:'取消',r:[{sp:'i',t:'……'},{t:'真的要删掉吗？',choice:[{l:'删除',r:[{st:1,sp:'i',t:'所以删掉了。'}]}]}]}
+ ]}
+]}]},
+{fade:1,t:'……'},
+{sc:'wall',st:0,fade:0,sp:'i',t:'我家院子里有一堵墙。'},
+{sp:'i',t:'墙的上面，是天空。蓝天。'},
+{sp:'i',t:'我不愿出门去看真正的天空。无所谓。'},
+{st:1,sp:'i',t:'最近天气都灰蒙蒙的。我讨厌空气污染。'},
+{sc:'windmill',fade:0,sp:'i',t:'远处的风车在转。因为有风。'},
+{end:1,n:['未知','这个存档，还没有结束。']}
+
+];
+const ORIG=beats.slice();
+let i=-1,typing=false,timer=null,cur=null,waiting=false;
+const txt=$('#txt'),btns=$('#btns'),hint=$('#hint'),box=$('#box'),ttl=$('#title');
+
+function hud(){cv.style.filter=''}
+function next(){
+  if(S.anim&&S.p<1)return;
+  let b;do{i++;b=beats[i]}while(b&&b.if&&!S.f[b.if]);if(!b)return;cur=b;
+  if(b.sc)S.sc=b.sc;if('cm' in b)S.cm=b.cm;if('cold' in b)S.cold=b.cold;if('rs' in b)S.rs=b.rs;
+  if('fade' in b)S.ft=b.fade;if('fell' in b)S.fell=b.fell;if('cup' in b)S.cup=b.cup;if('spill' in b)S.spill=b.spill;if('two' in b)S.two=b.two;if('sig' in b)S.sig=b.sig;if('st' in b){S.st=b.st;S.sT=performance.now()/1000}if('tch' in b)S.tch=b.tch;if('pair' in b)S.pair=b.pair;
+  if(b.anim){S.p=0;S.anim=1;S.t0=performance.now()}
+  if(b.num){S.num=Math.max(0,S.num+b.num);hud()}if(b.songs)floatSongs();
+  if(b.title){ttl.innerHTML='<b>'+b.title[0]+'</b><i>'+b.title[1]+'</i>';ttl.style.opacity=1}else ttl.style.opacity=0;
+  if(b.end){return endCard(b)}
+  setMood(b.mood||mk());
+  box.className='sp-'+(b.sp||'n');
+  say(b);
+}
+function say(b){
+  txt.textContent='';btns.innerHTML='';hint.style.visibility='hidden';
+  const s=b.t||'';let k=0;typing=true;clearInterval(timer);
+  if(!s){return finish(b)}
+  if(b.cut)setTimeout(()=>{if(cur===b)next()},b.cut);
+  timer=setInterval(()=>{txt.textContent=s.slice(0,++k);if(k%2==0)tone(880+Math.random()*120,.03,'triangle',.012);if(k>=s.length)finish(b)},34);
+}
+function finish(b){
+  clearInterval(timer);typing=false;txt.textContent=b.t||'';
+  if(b.choice){
+    b.choice.forEach(c=>{const e=document.createElement('button');e.textContent=c.l;if(c.lock){e.style.opacity='.3';e.style.pointerEvents='none'}
+      e.onclick=()=>{if(c.f)S.f[c.f]=1;if(c.hp)S.hp=1;if('rs' in c)S.rs=c.rs;if(c.end){S.hp=0;S.rs=''}
+        const L=c.r.map(x=>typeof x==='string'?{t:x}:x);
+        if(b.hub&&!c.end)L.push({...b,t:'接下来呢？',choice:b.choice.filter(x=>x!==c)});
+        beats.splice(i+1,0,...L);btns.innerHTML='';next()};btns.appendChild(e)});
+  }else if(b.fly){
+    S.alt=0;let n=0;const e=document.createElement('button');e.textContent='往上飞';
+    e.onclick=()=>{n++;S.alt=Math.min(.92,S.alt+.115);if(n==5)txt.textContent='再往上一点。';if(n>=9){btns.innerHTML='';next()}};btns.appendChild(e);
+  }else if(b.tap){
+    S.alt=0;let n=0;const e=document.createElement('button');e.textContent=b.tap.l;
+    e.onclick=()=>{n++;S.alt=n/b.tap.n;if(b.tap.m&&n<b.tap.n)txt.textContent=b.tap.m[Math.min(n-1,b.tap.m.length-1)];if(n>=b.tap.n){btns.innerHTML='';next()}};btns.appendChild(e);
+  }else if(b.tool){
+    const e=document.createElement('button');e.textContent=b.tool=='run'?'打开运行器':'打开皮肤生成器';e.onclick=()=>openTool(b.tool);btns.appendChild(e);
+  }else if(b.puz){
+    const e=document.createElement('button');e.textContent='打开 level.dat';e.onclick=openPuz;btns.appendChild(e);
+  }else if(b.diary){
+    const e=document.createElement('button');e.textContent='翻开日记本';e.onclick=openDiary;btns.appendChild(e);
+  }else if(b.auto){setTimeout(()=>{if(cur===b)next()},b.auto);
+  }else if(b.wait){hint.style.visibility='hidden';waiting=true;setTimeout(()=>{waiting=false;hint.style.visibility='visible'},b.wait*1000);
+  }else hint.style.visibility='visible';
+}
+box.addEventListener('click',e=>{
+  if(e.target.closest('button'))return;
+  if(waiting)return;if(typing){finish(cur);return}
+  if(cur&&(cur.auto||cur.choice||cur.diary||cur.fly||cur.tap||cur.puz||cur.tool||cur.end))return;
+  next();
+});
+
+/* 锁住的成就 */
+const PZ=[['LevelName','string','我的世界',0],['RandomSeed','long','-84412093',0],['hasBeenLoadedInCreative','byte',1,1],['cheatsEnabled','byte',1,1],['commandsEnabled','byte',1,1],['GameType','int',1,1],['Difficulty','int',2,0],['Time','long','48210',0]];
+const pv=PZ.map(r=>r[2]);
+function renderPuz(){
+  const box=$('#rows');box.innerHTML='';
+  PZ.forEach((r,k)=>{const e=document.createElement('button');e.innerHTML='<span>'+r[0]+' <i style="opacity:.5;font-style:normal">'+r[1]+'</i></span><span>'+pv[k]+'</span>';
+    if(r[3]&&pv[k]===0)e.className='ok';
+    e.onclick=()=>{if(!r[3]){$('#pmsg').textContent='这一项连着建筑和背包。不要动它。';return}
+      pv[k]=pv[k]===0?r[2]:0;$('#pmsg').textContent='点一项，就能改它的值。';renderPuz()};
+    box.appendChild(e)});
+  $('#wb').disabled=!PZ.every((r,k)=>!r[3]||pv[k]===0);
+}
+function openPuz(){$('#puz').style.display='flex';renderPuz()}
+$('#wb').onclick=()=>{chime();$('#puz').style.display='none';btns.innerHTML='';next()};
+
+/* 运行器 */
+const rc=$('#rc'),rf=$('#rf'),RDEF='<h1>你好</h1>\n<p>这是我自己的页面。</p>';
+rc.value=RDEF;
+$('#rr').onclick=()=>{rf.srcdoc=rc.value;$('#rd').disabled=rc.value.trim().length<8};
+$('#rd').onclick=()=>{chime();
+  $('#run').style.display='none';
+  if(rc.value!==RDEF){const d=new DOMParser().parseFromString(rc.value,'text/html'),tx=(d.body.textContent||'').trim();if(tx)addFrag(tx.slice(0,60))}
+  btns.innerHTML='';next();
+};
+/* 皮肤 */
+const sc=$('#sc'),sg=sc.getContext('2d');
+function mc(c,d){
+  if(d==0||c.length<2){const n=c.length||1;let r=0,g=0,b=0;c.forEach(x=>{r+=x[0];g+=x[1];b+=x[2]});return [[r/n|0,g/n|0,b/n|0]]}
+  let ch=0,best=-1;for(let k=0;k<3;k++){let lo=255,hi=0;c.forEach(x=>{lo=Math.min(lo,x[k]);hi=Math.max(hi,x[k])});if(hi-lo>best){best=hi-lo;ch=k}}
+  c.sort((a,b)=>a[ch]-b[ch]);const m=c.length>>1;return mc(c.slice(0,m),d-1).concat(mc(c.slice(m),d-1));
+}
+function skinFrom(src){
+  const w=16,h=32,t=document.createElement('canvas');t.width=w;t.height=h;const g2=t.getContext('2d');
+  const sw=src.naturalWidth||src.width,sh=src.naturalHeight||src.height,k=Math.max(w/sw,h/sh),dw=sw*k,dh=sh*k;
+  g2.drawImage(src,(w-dw)/2,(h-dh)/2,dw,dh);
+  const d=g2.getImageData(0,0,w,h).data,cols=[];
+  for(let i=0;i<d.length;i+=4)cols.push([d[i],d[i+1],d[i+2]]);
+  const pal=mc(cols.slice(),4);
+  sc.width=w*8;sc.height=h*8;sg.clearRect(0,0,sc.width,sc.height);
+  for(let i=0;i<cols.length;i++){
+    const x=i%w,y=i/w|0;
+    const ok=(y<8&&x>=4&&x<12)||(y>=8&&y<20)||(y>=20&&x>=4&&x<12);
+    if(!ok)continue;
+    let b=pal[0],bd=1e9;
+    for(const p of pal){const e=(p[0]-cols[i][0])**2+(p[1]-cols[i][1])**2+(p[2]-cols[i][2])**2;if(e<bd){bd=e;b=p}}
+    sg.fillStyle='rgb('+b+')';sg.fillRect(x*8,y*8,8,8);
+  }
+  $('#sk').disabled=false;
+}
+$('#sf').onchange=e=>{
+  const f=e.target.files&&e.target.files[0];if(!f)return;
+  const img=new Image(),u=URL.createObjectURL(f);
+  img.onload=()=>{skinFrom(img);URL.revokeObjectURL(u)};img.src=u;
+};
+$('#sd').onclick=()=>{
+  const c=document.createElement('canvas');c.width=32;c.height=64;const q=c.getContext('2d');
+  const gr=q.createLinearGradient(0,0,0,64);gr.addColorStop(0,'#2b3a5c');gr.addColorStop(.6,'#d9a45b');gr.addColorStop(1,'#3a2f2a');
+  q.fillStyle=gr;q.fillRect(0,0,32,64);q.fillStyle='#e0b890';q.fillRect(12,6,8,8);q.fillStyle='#e8e4d8';q.fillRect(10,14,12,20);q.fillStyle='#2a3a6a';q.fillRect(10,34,12,20);
+  skinFrom(c);
+};
+$('#sk').onclick=()=>{chime();$('#skp').style.display='none';btns.innerHTML='';next()};
+function openTool(k){$(k=='run'?'#run':'#skp').style.display='flex'}
+/* 歌单 */
+const SONGS=['Blessed','Versailles Flow',"Can't Get Over Losing You",'Sabbath School',"Not That I'm Anywhere",'壊れない','Water for Maya','突然','踏浪','镜花','White Ferrari','Sakura','活在梦里真美好','Sodium Chloride','Surabaya','Summer','一千零一夜','Avril 14th','点线面','落单.续','Subwoofer Lullaby','请你不要离开','破碎乱码 Garble','MOMENTS','i miss your warm hands','7AM','都挺好','家','让我飞吧','日出到日落','秋千','恋人へ','Xtal','Heliosphan','Snowy','かたわれ時','Sentimental Kills','我昨晚夢見你了','when you sleep','Wet Hands','Departures','早安中国','アラベスク','我们要找个地方坐着聊天','Undertale'];
+function floatSongs(){
+  const f=$('#frags'),a=SONGS.slice().sort(()=>Math.random()-.5).slice(0,9);
+  a.forEach((w,n)=>{const e=document.createElement('span');e.className='song';e.textContent='♪ '+w;
+    e.style.left=(5+Math.random()*70)+'%';e.style.animationDuration=(11+Math.random()*7)+'s';e.style.animationDelay=(n*1.6)+'s';f.appendChild(e)});
+}
+
+/* 日记 */
+const dia=$('#diary'),ta=$('#ta');
+function openDiary(){dia.style.display='flex';ta.focus()}
+$('#fill').onclick=()=>{ta.value='我很难堪。'};
+$('#close').onclick=()=>{
+  dia.style.display='none';const v=ta.value.trim();btns.innerHTML='';
+  if(v){addFrag(v);beats.splice(i+1,0,{sp:'i',t:'写下来之后，字没有消失。它们飘在我周围，很轻。'})}
+  else beats.splice(i+1,0,{sp:'i',t:'什么也没写。白页，也算一页。'});
+  next();
+};
+function addFrag(v){
+  const f=$('#frags');
+  v.split(/[，。,.\n！？!?]+/).filter(Boolean).slice(0,8).forEach((w,n)=>{
+    const s=document.createElement('span');s.textContent=w;
+    s.style.left=(8+Math.random()*80)+'%';s.style.animationDuration=(14+Math.random()*10)+'s';s.style.animationDelay=(n*1.2)+'s';
+    s.style.animationIterationCount='3';f.appendChild(s);
+  });
+}
+function endCard(b){
+  S.ft=S.sc=='windmill'?.55:1;ttl.innerHTML='<b>'+b.n[0]+'</b><i>'+b.n[1]+'</i>';ttl.style.opacity=1;
+  box.className='sp-n';txt.textContent='以后的事，还不知道。等它发生了，再写进来。';btns.innerHTML='';hint.style.visibility='hidden';
+  const e=document.createElement('button');e.textContent='重新开始';e.onclick=()=>location.reload();btns.appendChild(e);
+}
+
+/* 选章节 */
+function buildChap(){
+  const cl=$('#cl');cl.innerHTML='';
+  ORIG.forEach((b,k)=>{
+    if(k>0&&(b.title||(b.end&&b.n))){
+      const e=document.createElement('button');e.textContent=(b.title||b.n).join('  ');
+      e.onclick=()=>jump(k);cl.appendChild(e);
+    }
+  });
+}
+function jump(k){
+  ['#chap','#diary','#puz','#run','#skp'].forEach(q=>$(q).style.display='none');
+  clearInterval(timer);typing=false;btns.innerHTML='';
+  beats.splice(0,beats.length,...ORIG);
+  S.hp=0;S.rs='';S.anim=0;S.p=0;S.cm=0;S.cold=0;S.sc='black';S.fade=1;S.ft=1;S.f={};S.cup=0;S.spill=0;S.fell=0;S.two=0;S.sig=0;S.tch=0;S.pair=0;
+  S.num=Math.max(0,ORIG.slice(0,k).reduce((a,b)=>a+(b.num||0),0));hud();
+  i=k-1;next();
+}
+let tc=0,tt=0;
+$('#ttlh').onclick=()=>{const n=Date.now();tc=n-tt<1500?tc+1:1;tt=n;if(tc>=5){$('#chb').style.display='';tc=0}};
+$('#chb').onclick=()=>{buildChap();$('#chap').style.display='flex'};
+$('#cc').onclick=()=>{$('#chap').style.display='none'};
+
+/* ---------- 声音 ---------- */
+const A={ctx:null,m:null,lp:null,pad:null,tm:null,muted:false,want:null,cur:null};
+const MOODS={
+ soft:{r:523,n:[1,6/5,3/2,9/5,2],i:3600,w:'sine',v:.012,d:.9,skip:.4,lp:2400},
+ bright:{r:587,n:[1,9/8,5/4,3/2,5/3,2],i:3000,w:'triangle',v:.013,d:.9,skip:.35,lp:3200},
+ cold:{r:262,n:[1,6/5,3/2,9/5],i:5000,w:'sine',v:.012,d:1.6,skip:.5,lp:1600},
+ code:{r:330,n:[1,6/5,3/2,9/5,2],i:700,w:'square',v:.006,d:.25,skip:.35,lp:2600},
+ hp:{r:330,n:[1,5/4,3/2,5/3,2],i:3500,w:'triangle',v:.018,d:1.6,skip:.3,lp:3600},
+ room:{r:262,n:[1,6/5,3/2,9/5],i:6500,w:'sine',v:.01,d:2.4,skip:.5,lp:1600},
+ night:{r:220,n:[1,6/5,3/2],i:9000,w:'sine',v:.008,d:3,skip:.6,lp:1200},
+ rain:{r:220,n:[1,6/5,3/2],i:9000,w:'sine',v:.008,d:3,skip:.6,lp:2200,nz:.007},
+ cover:{r:196,n:[1,6/5,3/2],i:8000,w:'sine',v:.007,d:3,skip:.6,lp:500},
+ empty:{r:110,n:[1],i:9000,w:'sine',v:.005,d:3,skip:.8,lp:800},
+ wind:{r:196,n:[1,6/5,3/2],i:3000,w:'sine',v:.005,d:3,skip:.85,lp:1400,nz:.012,nzf:700}
+};
+const MM={tv:'soft',gma:'soft',comp:'soft',coat:'soft',van:'soft',class:'soft',room:'cold',hall:'cold',eyes:'cold',faces:'cold',mine:'cold',code:'code',field:'bright',fly:'bright',yard:'cold',film:'cold',door:'empty',cut:'empty',play:'soft',wash:'soft',floor:'soft',ginkgo:'bright',dorm:'cold',meal:'cold',mirror:'cold',pad:'cold',wake:'cold',water:'cold',cat:'soft',phone:'cold',lie:'night',apps:'cold',wall:'soft',windmill:'wind',gourd:'cold',bracelet:'cold',letter:'cold',bunk:'night',arm:'empty',tissue:'cold',geobook:'cold',beads:'cold',card:'cold',back:'cold',apart:'cold'};
+function mk(){
+  if(S.hp)return 'hp';
+  if(S.sc=='room'&&S.cm==9){if(S.rs=='cover')return 'cover';if(S.rs=='rain')return 'rain';if(S.rs=='night')return 'night';return 'room'}
+  return MM[S.sc]||null;
+}
+function aInit(){
+  if(A.ctx){if(A.ctx.state==='suspended')A.ctx.resume();return}
+  try{
+    const C=window.AudioContext||window.webkitAudioContext;A.ctx=new C();
+    A.m=A.ctx.createGain();A.m.gain.value=A.muted?0:.8;
+    A.lp=A.ctx.createBiquadFilter();A.lp.type='lowpass';A.lp.frequency.value=2600;
+    A.m.connect(A.lp);A.lp.connect(A.ctx.destination);
+    const w=A.want;A.want=null;setMood(w);
+  }catch(e){}
+}
+function tone(f,d,type,v,delay){
+  if(!A.ctx||A.muted)return;
+  const t=A.ctx.currentTime+(delay||0),o=A.ctx.createOscillator(),g=A.ctx.createGain();
+  o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(A.m);o.start(t);o.stop(t+d+.05);
+}
+function chime(){[523,659,784,1047].forEach((f,i)=>tone(f,.9,'sine',.07,i*.14))}
+function stopPad(){
+  if(!A.pad)return;const t=A.ctx.currentTime,P=A.pad;A.pad=null;
+  P.g.gain.cancelScheduledValues(t);P.g.gain.setValueAtTime(P.g.gain.value,t);P.g.gain.linearRampToValueAtTime(0,t+1.5);
+  P.os.forEach(o=>{try{o.stop(t+1.6)}catch(e){}});
+}
+function startNz(v,fq){
+  const C=A.ctx,b=C.createBuffer(1,C.sampleRate*2,C.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  const o=C.createBufferSource();o.buffer=b;o.loop=true;
+  const f=C.createBiquadFilter();f.type='bandpass';f.frequency.value=fq||1800;f.Q.value=.6;
+  const g=C.createGain();g.gain.value=0;g.gain.linearRampToValueAtTime(v,C.currentTime+3);
+  o.connect(f);f.connect(g);g.connect(A.m);o.start();A.nz={o,g};
+}
+function stopNz(){
+  if(!A.nz)return;const{o,g}=A.nz;A.nz=null;const t=A.ctx.currentTime;
+  g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+1.2);
+  try{o.stop(t+1.3)}catch(e){}
+}
+function setMood(k){
+  if(k===A.want&&A.ctx&&A.cur===k)return;
+  A.want=k;
+  if(!A.ctx)return;
+  A.cur=k;clearInterval(A.tm);stopPad();stopNz();
+  const c=MOODS[k];if(!c)return;
+  A.lp.frequency.setTargetAtTime(c.lp,A.ctx.currentTime,1.5);
+  if(c.nz)startNz(c.nz,c.nzf);
+  A.tm=setInterval(()=>{if(A.nz&&c.nz)A.nz.g.gain.linearRampToValueAtTime(c.nz*(.4+Math.random()*1.2),A.ctx.currentTime+2.5);if(Math.random()<c.skip)return;const n=c.n[Math.random()*c.n.length|0]*(Math.random()<.15?2:1);tone(c.r*n,c.d,c.w,c.v)},c.i);
+}
+document.addEventListener('pointerdown',aInit);
+document.addEventListener('click',e=>{if(e.target.closest('button'))tone(520,.08,'sine',.05)});
+$('#snd').onclick=()=>{aInit();A.muted=!A.muted;if(A.m)A.m.gain.value=A.muted?0:.8;$('#snd').textContent=A.muted?'♪ 关':'♪ 开'};
+
+function drawRS(t){
+  if(S.sc!=='room'||!S.rs)return;
+  if(S.rs=='rain'){R(0,0,W,H,'#4a6a8a',.12);for(let i=0;i<16;i++)R(100+((i*7)%30),10+((t*45+i*13)%30),1,3,'#aac4e0',.7)}
+  if(S.rs=='hot')R(0,0,W,H,'#d9704a',.1+.04*Math.sin(t*2));
+  if(S.rs=='night')R(0,0,W,H,'#000',.3);
+  if(S.rs=='dusk')R(0,0,W,H,'#d9a45b',.1);
+  if(S.rs=='cover'){R(0,0,W,H,'#000',.55);R(18,44,60,20,'#2a2f3c');R(18,44,60,3,'#3a4050')}
+}
+/* 主循环 */
+function loop(ts){
+  const t=ts/1000;
+  if(S.anim){S.p=Math.min(1,(ts-S.t0)/2800);if(S.p>=1)S.anim=0}
+  S.fade+=(S.ft-S.fade)*.06;
+  (scenes[S.sc]||(window.PRIVATE_SCENES||{})[S.sc]||scenes.black)(t);
+  drawRS(t);
+  if(S.cold)R(0,0,W,H,'#2a4a7a',.14);
+  if(S.hp)R(0,0,W,H,'#000',.5);
+  if(S.fade>.01)R(0,0,W,H,'#000',S.fade);
+  requestAnimationFrame(loop);
+}
+hud();requestAnimationFrame(loop);next();
+</script>
+<script>
+/* ===== 日记 ===== */
+(function(){
+  const DPW='1011', DDB='diaryPacker', DST='imgs';
+  const hudRight=document.querySelector('#hud > span:last-child');
+  if(!hudRight)return;
+
+  const btn=document.createElement('button');
+  btn.id='dbtn';btn.textContent='日记';
+  btn.style.cssText='padding:2px 8px;font-size:12px;border-width:1px';
+  hudRight.insertBefore(btn,hudRight.firstChild);
+
+  const st=document.createElement('style');
+  st.textContent='#pdlg,#pv{position:fixed;inset:0;background:rgba(3,6,9,.97);display:none;flex-direction:column;gap:8px;padding:calc(16px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px));z-index:9;max-width:560px;margin:0 auto;font-family:ui-monospace,Menlo,Consolas,monospace}#pdlg h2,#pv h2{margin:0;font-size:15px;color:#3fb68b;font-weight:400}#pdlg p{margin:0;font-size:13px;color:var(--dim)}#pdlg input{font:inherit;font-size:16px;letter-spacing:6px;text-align:center;background:#0b1118;color:#cfe8dc;border:2px solid #1d2a2a;padding:10px;width:100%;-webkit-user-select:text;user-select:text}#pdlg input:focus{outline:none;border-color:#3fb68b}#pdlg button,#pv button{font:inherit;font-size:15px;color:var(--fg);background:transparent;border:2px solid #1d2a2a;padding:8px 12px;cursor:pointer;text-align:left}#pvstage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:#050608;border:2px solid #1d2a2a;overflow:hidden}#pvstage img{max-width:100%;max-height:100%;display:block;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}#pvbar{display:flex;gap:10px;align-items:center;justify-content:center}#pvbar button{flex:0 0 auto;padding:6px 14px}#pvbar span{font-size:13px;color:var(--dim)}#pvbar button[disabled]{opacity:.3}';
+  document.head.appendChild(st);
+
+  const dlg=document.createElement('div');
+  dlg.id='pdlg';
+  dlg.innerHTML='<h2>日记</h2><p id="pdm">输入密码。</p><input type="password" id="pdp" autocomplete="new-password" inputmode="numeric" maxlength="12"><button id="pdg">打开</button><button id="pdx">返回</button>';
+  document.body.appendChild(dlg);
+
+  const pv=document.createElement('div');
+  pv.id='pv';
+  pv.innerHTML='<h2>日记</h2><div id="pvstage"><img id="pvi" alt=""></div><div id="pvbar"><button id="pvl">‹</button><span id="pvn">…</span><button id="pvr">›</button></div><button id="pvc">合上</button>';
+  document.body.appendChild(pv);
+
+  let ddb=null,dvp=[],dvi=0;
+  const $=s=>document.getElementById(s);
+
+  function dOpen(){return new Promise((ok,no)=>{const r=indexedDB.open(DDB,1);r.onsuccess=()=>{ddb=r.result;ok()};r.onerror=()=>no(r.error);r.onupgradeneeded=()=>r.result.createObjectStore(DST,{keyPath:'name'})})}
+  function dGet(){return new Promise(ok=>{if(!ddb){ok([]);return}const r=ddb.transaction(DST,'readonly').objectStore(DST).getAll();r.onsuccess=()=>ok(r.result||[]);r.onerror=()=>ok([])})}
+  function dShow(){if(!dvp.length){$('pvn').textContent='0 / 0';return}$('pvi').src=dvp[dvi].data;$('pvn').textContent=(dvi+1)+' / '+dvp.length;$('pvl').disabled=dvi<=0;$('pvr').disabled=dvi>=dvp.length-1}
+
+  $('dbtn').onclick=()=>{$('pdp').value='';$('pdm').textContent='输入密码。';$('pdlg').style.display='flex';setTimeout(()=>{try{$('pdp').focus()}catch(e){}},60)};
+  $('pdx').onclick=()=>{$('pdlg').style.display='none'};
+  $('pdg').onclick=async()=>{
+    if($('pdp').value!==DPW){$('pdm').textContent='不对。';$('pdp').value='';$('pdp').focus();return}
+    $('pdm').textContent='读……';
+    try{if(!ddb)await dOpen()}catch(e){$('pdm').textContent='读不了本地数据。';return}
+    dvp=await dGet();
+    if(!dvp.length){$('pdm').textContent='没有找到图片。';return}
+    dvp.sort((a,b)=>{const ta=a.t||0,tb=b.t||0;if(ta!==tb)return ta-tb;return a.name.localeCompare(b.name,'zh')});
+    dvi=0;$('pdlg').style.display='none';$('pv').style.display='flex';dShow();
+  };
+  $('pdp').addEventListener('keydown',e=>{if(e.key==='Enter')$('pdg').click()});
+  $('pvl').onclick=()=>{if(dvi>0){dvi--;dShow()}};
+  $('pvr').onclick=()=>{if(dvi<dvp.length-1){dvi++;dShow()}};
+  $('pvc').onclick=()=>{$('pv').style.display='none';$('pvi').src=''};
+})();
+</script>
+</body>
+</html>
